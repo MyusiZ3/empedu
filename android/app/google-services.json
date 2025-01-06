@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:145908719158:android:ca6fa4961893f0119c8297",
         "android_client_info": {
-          "package_name": "com.empedu.app"
+          "package_name": "com.example.empedu"
         }
       },
       "oauth_client": [],
