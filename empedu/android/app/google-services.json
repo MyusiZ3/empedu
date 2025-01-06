@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "145908719158",
+    "project_id": "empedu-a57c3",
+    "storage_bucket": "empedu-a57c3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145908719158:android:ca6fa4961893f0119c8297",
+        "android_client_info": {
+          "package_name": "com.empedu.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8gZuI-pDS9m8nbwI2ue7drJ_TcMQ-_Qc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
