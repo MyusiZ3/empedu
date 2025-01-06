@@ -1,5 +1,5 @@
 import 'package:empedu/services/auth_service.dart'; // Disesuaikan dengan nama package Anda
-import 'package:empedu/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
