@@ -1,0 +1,9 @@
+
+.codegpt
+/android/app/build/
+/build/app/
+/build/app/outputs
+
+# Ignore files
+*.apk
+*.sha1

@@ -9,6 +9,8 @@ class Signup extends StatelessWidget {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,34 +21,76 @@ class Signup extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          toolbarHeight: 50,
+          toolbarHeight: 30,
+          leading: Container(),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 1),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Text(
-                    'Register Account',
-                    style: GoogleFonts.raleway(
-                        textStyle: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32)),
+                RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'emp',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins-SemiBold',
+                          color: Color(0xFFF691FF),
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'EDU',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins-SemiBold',
+                          color: Color(0xFF7B88FF),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 80,
+                const SizedBox(height: 5),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Empowering\n',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Regular',
+                          color: Color(0xFFF691FF),
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Education for Development and Understanding',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Regular',
+                          color: Color(0xFF7B88FF),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(height: 60),
+                Image.asset(
+                  'assets/ImageLogin.png',
+                  height: 150,
+                ),
+                const SizedBox(height: 40),
                 _emailAddress(),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 16),
                 _password(),
-                const SizedBox(
-                  height: 50,
-                ),
+                const SizedBox(height: 16),
+                _confirmPassword(),
+                const SizedBox(height: 40),
                 _signup(context),
               ],
             ),
@@ -62,28 +106,29 @@ class Signup extends StatelessWidget {
         Text(
           'Email Address',
           style: GoogleFonts.raleway(
-              textStyle: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16)),
+            textStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
+            ),
+          ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
-        TextField(
-          controller: _emailController,
-          decoration: InputDecoration(
-              filled: true,
-              hintText: 'mahdiforwork@gmail.com',
-              hintStyle: const TextStyle(
-                  color: Color(0xff6A6A6A),
-                  fontWeight: FontWeight.normal,
-                  fontSize: 14),
-              fillColor: const Color(0xffF7F7F9),
+        const SizedBox(height: 6),
+        SizedBox(
+          width: 320,
+          child: TextField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              labelText: 'Uremail@gmail.com',
+              prefixIcon: const Icon(Icons.person),
               border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(14))),
-        )
+                borderRadius: BorderRadius.circular(12),
+              ),
+              fillColor: const Color(0xffF7F7F9),
+              filled: true,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -96,75 +141,155 @@ class Signup extends StatelessWidget {
         Text(
           'Password',
           style: GoogleFonts.raleway(
-              textStyle: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16)),
+            textStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
+            ),
+          ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
-        TextField(
-          controller: _passwordController,
-          obscureText: true,
-          decoration: InputDecoration(
-              filled: true,
-              fillColor: const Color(0xffF7F7F9),
+        const SizedBox(height: 6),
+        SizedBox(
+          width: 320,
+          child: TextField(
+            obscureText: true,
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              prefixIcon: const Icon(Icons.lock),
               border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(14))),
-        )
+                borderRadius: BorderRadius.circular(12),
+              ),
+              fillColor: const Color(0xffF7F7F9),
+              filled: true,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _confirmPassword() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Confirm Password',
+          style: GoogleFonts.raleway(
+            textStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        SizedBox(
+          width: 320,
+          child: TextField(
+            obscureText: true,
+            controller: _confirmPasswordController,
+            decoration: InputDecoration(
+              labelText: 'Confirm Password',
+              prefixIcon: const Icon(Icons.lock),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              fillColor: const Color(0xffF7F7F9),
+              filled: true,
+            ),
+          ),
+        ),
       ],
     );
   }
 
   Widget _signup(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xff0D6EFD),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
-        minimumSize: const Size(double.infinity, 60),
-        elevation: 0,
-      ),
       onPressed: () async {
-        await AuthService().signup(
+        // Check if the passwords match
+        if (_passwordController.text == _confirmPasswordController.text) {
+          await AuthService().signup(
             email: _emailController.text,
             password: _passwordController.text,
-            context: context);
+            context: context,
+          );
+        } else {
+          // Show error if passwords do not match
+          _showPasswordMismatchDialog(context);
+        }
       },
-      child: const Text("Sign Up"),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xff898de8),
+        minimumSize: const Size(147, 48),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      child: const Text(
+        'Sign Up',
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+          fontFamily: 'Poppins-Bold',
+        ),
+      ),
+    );
+  }
+
+  void _showPasswordMismatchDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Password Mismatch'),
+          content: const Text(
+              'The passwords you entered do not match. Please try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 
   Widget _signin(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 36),
       child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(children: [
-            const TextSpan(
-              text: "Already Have Account? ",
-              style: TextStyle(
-                  color: Color(0xff6A6A6A),
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16),
+        textAlign: TextAlign.center,
+        text: TextSpan(children: [
+          const TextSpan(
+            text: "Already have an account? ",
+            style: TextStyle(
+              color: Color(0xff6A6A6A),
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
             ),
-            TextSpan(
-                text: "Log In",
-                style: const TextStyle(
-                    color: Color(0xff1A1D1E),
-                    fontWeight: FontWeight.normal,
-                    fontSize: 16),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                  }),
-          ])),
+          ),
+          TextSpan(
+            text: "Log In",
+            style: const TextStyle(
+              color: Color(0xff1A1D1E),
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              },
+          ),
+        ]),
+      ),
     );
   }
 }

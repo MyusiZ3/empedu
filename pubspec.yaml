@@ -30,9 +30,33 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  
+
   # Enable generation of localized Strings from arb files.
   generate: true
 
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/default_avatar.png
+    - assets/ImageLogin.png
+    - assets/Logo.png
+    - assets/Icon_Apps.png
+    - assets/Imyusi.JPG
+    - assets/menggambar.png
+    - assets/Menghitung.png
+    - assets/Mewarnai.png
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600

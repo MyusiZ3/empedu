@@ -38,24 +38,14 @@ class AuthService {
         message = 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
         message = 'An account already exists with that email.';
+      } else {
+        message = 'An unexpected error occurred: ${e.message}';
       }
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+
+      // Tampilkan dialog kesalahan
+      _showErrorDialog(context, message);
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "An unexpected error occurred.",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      _showErrorDialog(context, "An unexpected error occurred.");
       print("Error: $e");
     }
   }
@@ -92,24 +82,14 @@ class AuthService {
         message = 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
         message = 'Wrong password provided for that user.';
+      } else {
+        message = 'An unexpected error occurred: ${e.message}';
       }
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+
+      // Tampilkan dialog kesalahan
+      _showErrorDialog(context, message);
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "An unexpected error occurred.",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      _showErrorDialog(context, "An unexpected error occurred.");
       print("Error: $e");
     }
   }
@@ -120,6 +100,27 @@ class AuthService {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (BuildContext context) => Login()),
+    );
+  }
+
+  // Fungsi untuk menampilkan dialog kesalahan
+  void _showErrorDialog(BuildContext context, String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
