@@ -1,8 +1,8 @@
-import 'package:empedu/firebase_options.dart'; // Sesuaikan dengan nama package Anda
-import 'package:empedu/pages/login/login.dart'; // Sesuaikan dengan nama package Anda
+import 'package:empedu/firebase_options.dart'; // Sesuaikan dengan nama package
+import 'package:empedu/pages/login/login.dart'; // Sesuaikan dengan nama package
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'pages/signup/signup.dart'; // Sesuaikan jika Anda membutuhkan halaman signup
+import 'pages/signup/signup.dart'; // Sesuaikan jika membutuhkan halaman signup
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

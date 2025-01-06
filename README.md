@@ -1,4 +1,4 @@
-# Empedu Project
+# Empedu Project (Empowering Education for Development and Understanding)
 
 Empedu is a Flutter-based mobile application aimed at managing educational tasks efficiently. Below is the overview of the project's folder structure and its contents.
 
