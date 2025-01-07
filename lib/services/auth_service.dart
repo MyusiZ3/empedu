@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:empedu/pages/dashboard/dashboard.dart';
 
 import '../pages/home/home.dart';
 import '../pages/login/login.dart';
@@ -28,10 +29,14 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => Home()),
-      );
+
+      // Pastikan konteks masih valid sebelum melakukan navigasi
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => Login()),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == 'weak-password') {
@@ -43,9 +48,14 @@ class AuthService {
       }
 
       // Tampilkan dialog kesalahan
-      _showErrorDialog(context, message);
+      if (context.mounted) {
+        _showErrorDialog(context, message);
+      }
     } catch (e) {
-      _showErrorDialog(context, "An unexpected error occurred.");
+      // Tampilkan dialog kesalahan
+      if (context.mounted) {
+        _showErrorDialog(context, "An unexpected error occurred.");
+      }
       print("Error: $e");
     }
   }
@@ -72,10 +82,15 @@ class AuthService {
           .signInWithEmailAndPassword(email: email, password: password);
 
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => Home()),
-      );
+
+      // Pastikan konteks masih valid sebelum melakukan navigasi
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const DashboardPage()),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == 'user-not-found') {
@@ -87,9 +102,14 @@ class AuthService {
       }
 
       // Tampilkan dialog kesalahan
-      _showErrorDialog(context, message);
+      if (context.mounted) {
+        _showErrorDialog(context, message);
+      }
     } catch (e) {
-      _showErrorDialog(context, "An unexpected error occurred.");
+      // Tampilkan dialog kesalahan
+      if (context.mounted) {
+        _showErrorDialog(context, "An unexpected error occurred.");
+      }
       print("Error: $e");
     }
   }
@@ -97,30 +117,36 @@ class AuthService {
   Future<void> signout({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
     await Future.delayed(const Duration(seconds: 1));
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (BuildContext context) => Login()),
-    );
+
+    // Pastikan konteks masih valid sebelum melakukan navigasi
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => Login()),
+      );
+    }
   }
 
   // Fungsi untuk menampilkan dialog kesalahan
   void _showErrorDialog(BuildContext context, String errorMessage) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(errorMessage),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

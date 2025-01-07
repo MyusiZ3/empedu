@@ -103,23 +103,13 @@ class Login extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Email Address',
-          style: GoogleFonts.raleway(
-            textStyle: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-            ),
-          ),
-        ),
         const SizedBox(height: 6),
         SizedBox(
           width: 320,
           child: TextField(
             controller: _emailController,
             decoration: InputDecoration(
-              labelText: 'Uremail@mail.com',
+              labelText: 'Email',
               prefixIcon: const Icon(Icons.person),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -138,16 +128,16 @@ class Login extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Password',
-          style: GoogleFonts.raleway(
-            textStyle: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-            ),
-          ),
-        ),
+        // Text(
+        //   'Password',
+        //   style: GoogleFonts.raleway(
+        //     textStyle: const TextStyle(
+        //       color: Colors.black,
+        //       fontWeight: FontWeight.normal,
+        //       fontSize: 16,
+        //     ),
+        //   ),
+        // ),
         const SizedBox(height: 6),
         SizedBox(
           width: 320,
