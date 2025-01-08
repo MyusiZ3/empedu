@@ -371,11 +371,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   SizedBox(height: 12),
-                  ElevatedButton(
+                  TextButton(
                     onPressed: _showLogoutDialog,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      minimumSize: const Size(147, 48),
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          const Color(0xFFFFFFFF), // Warna latar belakang
+                      minimumSize: const Size(147, 48), // Ukuran minimum button
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -384,11 +385,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       'Logout',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 193, 193, 193), // Warna teks
                         fontFamily: 'Poppins-Bold',
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 // Import screens kategori
 import 'package:empedu/pages/categories/math_screen.dart';
 import 'package:empedu/pages/categories/drawing_screen.dart';
+import 'package:empedu/pages/categories/reading_screen.dart';
+import 'package:empedu/pages/calculator/calculator.dart';
 
 // Import Secure Storage
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -43,6 +45,8 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => DashboardPage(),
         'MathScreen': (context) => const MathScreen(), // Cocok dengan Firebase
         'DrawingScreen': (context) => const DrawingScreen(),
+        'CalculatorPage': (context) => CalculatorPage(),
+        'ReadingScreen': (context) => const ReadingScreen(),
       },
     );
   }

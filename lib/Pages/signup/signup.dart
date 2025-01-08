@@ -2,7 +2,6 @@ import 'package:empedu/pages/login/login.dart';
 import 'package:empedu/services/auth_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Signup extends StatelessWidget {
   Signup({super.key});

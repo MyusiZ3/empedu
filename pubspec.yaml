@@ -20,6 +20,10 @@ dependencies:
   url_launcher: ^6.1.7
   path_provider: ^2.0.12
 
+  # Calculator
+  expressions: ^0.2.5+2
+  cupertino_icons: ^1.0.8
+
   # Firebase confg
   flutter_secure_storage: ^9.2.3
   firebase_auth: ^5.3.4

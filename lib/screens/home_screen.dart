@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           children: [
             CircleAvatar(
-              radius: 40,
+              radius: 39,
               backgroundImage: AssetImage(image),
             ),
             const SizedBox(width: 16),
