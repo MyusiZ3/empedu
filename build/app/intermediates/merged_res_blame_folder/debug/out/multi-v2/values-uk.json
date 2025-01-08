@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.empedu.app-mergeDebugResources-33:/values-uk/values-uk.xml",
+            "outputFile": "com.example.empedu.app-mergeDebugResources-34:/values-uk/values-uk.xml",
             "map": [
                 {
                     "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\c84e8a146159499b9c85f9e0df490157\\transformed\\jetified-play-services-base-18.1.0\\res\\values-uk\\values.xml",

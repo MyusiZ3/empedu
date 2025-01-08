@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.empedu.app-mergeDebugResources-33:/values-or/values-or.xml",
+            "outputFile": "com.example.empedu.app-mergeDebugResources-34:/values-or/values-or.xml",
             "map": [
                 {
                     "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\b2884dbf4ee3398b2907745768baeed2\\transformed\\core-1.13.1\\res\\values-or\\values-or.xml",

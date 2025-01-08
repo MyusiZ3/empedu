@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.empedu.app-mergeDebugResources-33:/values-hr/values-hr.xml",
+            "outputFile": "com.example.empedu.app-mergeDebugResources-34:/values-hr/values-hr.xml",
             "map": [
                 {
                     "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\5817c6ab20461ca34d4a9e51e2c64148\\transformed\\browser-1.8.0\\res\\values-hr\\values-hr.xml",

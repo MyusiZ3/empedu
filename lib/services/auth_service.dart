@@ -1,12 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:empedu/pages/dashboard/dashboard.dart';
 import 'package:empedu/pages/login/login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class AuthService {
+  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+
+  // Function to save user login status
+  Future<void> _saveUserLogin() async {
+    await _secureStorage.write(key: 'isLoggedIn', value: 'true');
+  }
+
+  // Function to check if the user is logged in
+  Future<bool> checkUserLoggedIn() async {
+    String? isLoggedIn = await _secureStorage.read(key: 'isLoggedIn');
+    return isLoggedIn == 'true';
+  }
+
+  // Signup function
   Future<void> signup({
     required String email,
     required String password,
@@ -30,7 +45,6 @@ class AuthService {
 
       await Future.delayed(const Duration(seconds: 1));
 
-      // Pastikan konteks masih valid sebelum melakukan navigasi
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
@@ -47,12 +61,10 @@ class AuthService {
         message = 'An unexpected error occurred: ${e.message}';
       }
 
-      // Tampilkan dialog kesalahan
       if (context.mounted) {
         _showErrorDialog(context, message);
       }
     } catch (e) {
-      // Tampilkan dialog kesalahan
       if (context.mounted) {
         _showErrorDialog(context, "An unexpected error occurred.");
       }
@@ -60,6 +72,7 @@ class AuthService {
     }
   }
 
+  // Signin function
   Future<void> signin({
     required String email,
     required String password,
@@ -81,9 +94,10 @@ class AuthService {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
+      await _saveUserLogin(); // Save login status
+
       await Future.delayed(const Duration(seconds: 1));
 
-      // Pastikan konteks masih valid sebelum melakukan navigasi
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
@@ -101,12 +115,10 @@ class AuthService {
         message = 'An unexpected error occurred: ${e.message}';
       }
 
-      // Tampilkan dialog kesalahan
       if (context.mounted) {
         _showErrorDialog(context, message);
       }
     } catch (e) {
-      // Tampilkan dialog kesalahan
       if (context.mounted) {
         _showErrorDialog(context, "An unexpected error occurred.");
       }
@@ -114,14 +126,15 @@ class AuthService {
     }
   }
 
+  // Signout function
   Future<void> signout({required BuildContext context}) async {
-    // Show confirmation dialog before signing out
     bool shouldLogout = await _showLogoutConfirmationDialog(context);
     if (shouldLogout) {
       await FirebaseAuth.instance.signOut();
+      await _secureStorage.delete(key: 'isLoggedIn'); // Clear login status
+
       await Future.delayed(const Duration(seconds: 1));
 
-      // Pastikan konteks masih valid sebelum melakukan navigasi
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
@@ -156,7 +169,7 @@ class AuthService {
             );
           },
         ) ??
-        false; // If null is returned, treat as false
+        false;
   }
 
   // Function to pick image for profile
@@ -167,8 +180,6 @@ class AuthService {
 
     if (pickedFile != null) {
       File image = File(pickedFile.path);
-      // Handle image upload or save it in the user's profile
-      // For example, save the image to Firebase storage
       _uploadProfileImage(image, context);
     } else {
       Fluttertoast.showToast(
@@ -182,17 +193,9 @@ class AuthService {
     }
   }
 
-  // Function to upload the selected profile image (you can customize this)
+  // Function to upload profile image
   Future<void> _uploadProfileImage(File image, BuildContext context) async {
-    // Upload the image to Firebase storage or any other service
-    // After successful upload, update the user's profile with the new image URL.
-    // Example: Saving image URL to Firestore
-
     try {
-      // Code for uploading image to Firebase Storage or any other server
-      // For example:
-      // String downloadUrl = await uploadImageToFirebase(image);
-
       Fluttertoast.showToast(
         msg: "Profile picture updated successfully.",
         toastLength: Toast.LENGTH_LONG,

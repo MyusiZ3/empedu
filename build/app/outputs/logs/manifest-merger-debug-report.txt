@@ -76,6 +76,7 @@ MERGED from [:firebase_storage] C:\Users\muham\OneDrive\Documents\Github Proj\em
 MERGED from [:firebase_core] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\firebase_core\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:image_picker_android] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-34:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:flutter_secure_storage] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_secure_storage\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-10:12
 MERGED from [:fluttertoast] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider_android] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:permission_handler_android] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
@@ -119,12 +120,13 @@ MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\muham\.gradle\caches\t
 MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\muham\.gradle\caches\transforms-3\b180998d90889ac916a2146ed7025ca0\transformed\jetified-core-ktx-1.13.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.customview:customview:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\2a2b6b096855b6d75d920a7c7425166e\transformed\customview-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.core:core:1.13.1] C:\Users\muham\.gradle\caches\transforms-3\b2884dbf4ee3398b2907745768baeed2\transformed\core-1.13.1\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] C:\Users\muham\.gradle\caches\transforms-3\eb7029aaae7bf68eb0461d3ef80fd07d\transformed\jetified-security-crypto-1.1.0-alpha06\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\muham\.gradle\caches\transforms-3\e853a98e414c99c85c8bcc1508a74119\transformed\exifinterface-1.3.7\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muham\.gradle\caches\transforms-3\e080b70ddc4c24ec0f58ebf52f1f6b5c\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:17:1-55:12
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\muham\.gradle\caches\transforms-3\63b29c651472b813d4abf183b4aaa703\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\muham\.gradle\caches\transforms-3\8bc6529d3ee43424dc2c92f64a652867\transformed\jetified-tracing-1.2.0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\16015adb1a0bd7e2603e3d5a38dda1c1\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\muham\.gradle\caches\transforms-3\a929716a84f796f522115322639b049c\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\16015adb1a0bd7e2603e3d5a38dda1c1\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\6975512b65a6c9be10206869d3fff228\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-components:18.0.0] C:\Users\muham\.gradle\caches\transforms-3\05311eb498edefde04ee120f0708a9f2\transformed\jetified-firebase-components-18.0.0\AndroidManifest.xml:15:1-20:12
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\muham\.gradle\caches\transforms-3\55cae502cbbcc1a090525ed01850a20f\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
@@ -205,6 +207,8 @@ MERGED from [:image_picker_android] C:\Users\muham\OneDrive\Documents\Github Pro
 MERGED from [:image_picker_android] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-44
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_secure_storage] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_secure_storage\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:53
+MERGED from [:flutter_secure_storage] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_secure_storage\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:53
 MERGED from [:fluttertoast] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:fluttertoast] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
@@ -291,6 +295,8 @@ MERGED from [androidx.customview:customview:1.0.0] C:\Users\muham\.gradle\caches
 MERGED from [androidx.customview:customview:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\2a2b6b096855b6d75d920a7c7425166e\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.core:core:1.13.1] C:\Users\muham\.gradle\caches\transforms-3\b2884dbf4ee3398b2907745768baeed2\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.core:core:1.13.1] C:\Users\muham\.gradle\caches\transforms-3\b2884dbf4ee3398b2907745768baeed2\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] C:\Users\muham\.gradle\caches\transforms-3\eb7029aaae7bf68eb0461d3ef80fd07d\transformed\jetified-security-crypto-1.1.0-alpha06\AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] C:\Users\muham\.gradle\caches\transforms-3\eb7029aaae7bf68eb0461d3ef80fd07d\transformed\jetified-security-crypto-1.1.0-alpha06\AndroidManifest.xml:20:5-44
 MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\muham\.gradle\caches\transforms-3\e853a98e414c99c85c8bcc1508a74119\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\muham\.gradle\caches\transforms-3\e853a98e414c99c85c8bcc1508a74119\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muham\.gradle\caches\transforms-3\e080b70ddc4c24ec0f58ebf52f1f6b5c\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:21:5-44
@@ -299,10 +305,10 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\muham\.gradle\cach
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\muham\.gradle\caches\transforms-3\63b29c651472b813d4abf183b4aaa703\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\muham\.gradle\caches\transforms-3\8bc6529d3ee43424dc2c92f64a652867\transformed\jetified-tracing-1.2.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\muham\.gradle\caches\transforms-3\8bc6529d3ee43424dc2c92f64a652867\transformed\jetified-tracing-1.2.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\16015adb1a0bd7e2603e3d5a38dda1c1\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\16015adb1a0bd7e2603e3d5a38dda1c1\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\muham\.gradle\caches\transforms-3\a929716a84f796f522115322639b049c\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\muham\.gradle\caches\transforms-3\a929716a84f796f522115322639b049c\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\16015adb1a0bd7e2603e3d5a38dda1c1\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\16015adb1a0bd7e2603e3d5a38dda1c1\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\6975512b65a6c9be10206869d3fff228\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\muham\.gradle\caches\transforms-3\6975512b65a6c9be10206869d3fff228\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [com.google.firebase:firebase-components:18.0.0] C:\Users\muham\.gradle\caches\transforms-3\05311eb498edefde04ee120f0708a9f2\transformed\jetified-firebase-components-18.0.0\AndroidManifest.xml:18:5-44
@@ -324,7 +330,7 @@ MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] C:\Users\muh
 MERGED from [com.google.android.play:core-common:2.0.3] C:\Users\muham\.gradle\caches\transforms-3\22fae1222ad5adc939f1d612ad3b937f\transformed\jetified-core-common-2.0.3\AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.android.play:core-common:2.0.3] C:\Users\muham\.gradle\caches\transforms-3\22fae1222ad5adc939f1d612ad3b937f\transformed\jetified-core-common-2.0.3\AndroidManifest.xml:7:5-9:41
 	tools:overrideLibrary
-		ADDED from [com.google.firebase:firebase-auth:23.1.0] C:\Users\muham\.gradle\caches\transforms-3\c09c3099a3721c0c49d8dd96e1550736\transformed\jetified-firebase-auth-23.1.0\AndroidManifest.xml:23:9-148
+		ADDED from [:flutter_secure_storage] C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_secure_storage\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-50
 	android:targetSdkVersion
 		INJECTED from C:\Users\muham\OneDrive\Documents\Github Proj\empedu\android\app\src\debug\AndroidManifest.xml
 	android:minSdkVersion

@@ -5,8 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 // Import screens kategori
-import 'package:empedu/Pages/categories/math_screen.dart';
+import 'package:empedu/pages/categories/math_screen.dart';
 import 'package:empedu/pages/categories/drawing_screen.dart';
+
+// Import Secure Storage
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,17 +19,25 @@ Future<void> main() async {
         DefaultFirebaseOptions.currentPlatform, // Pastikan file ini sudah ada
   );
 
-  runApp(const MyApp());
+  // Periksa apakah pengguna sudah login
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  String? isLoggedIn = await secureStorage.read(key: 'isLoggedIn');
+
+  runApp(MyApp(isLoggedIn: isLoggedIn == 'true'));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login', // Tentukan route awal saat aplikasi dibuka
+      initialRoute: isLoggedIn
+          ? '/dashboard'
+          : '/login', // Tentukan rute awal berdasarkan status login
       routes: {
         '/login': (context) => Login(),
         '/dashboard': (context) => DashboardPage(),
