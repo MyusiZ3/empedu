@@ -1,14 +1,14 @@
-com.example.empedu.app-jetified-activity-1.8.1-0 C:\Users\muham\.gradle\caches\transforms-3\09eb6fc27cfb744ce1fc62ab368efa9a\transformed\jetified-activity-1.8.1\res
-com.example.empedu.app-jetified-play-services-base-18.0.1-1 C:\Users\muham\.gradle\caches\transforms-3\0d2c695a6e6c58e60b2dbf1207771648\transformed\jetified-play-services-base-18.0.1\res
-com.example.empedu.app-jetified-core-common-2.0.3-2 C:\Users\muham\.gradle\caches\transforms-3\22fae1222ad5adc939f1d612ad3b937f\transformed\jetified-core-common-2.0.3\res
-com.example.empedu.app-jetified-lifecycle-process-2.7.0-3 C:\Users\muham\.gradle\caches\transforms-3\2cde72fe132e920ad7a2e2d1624dc792\transformed\jetified-lifecycle-process-2.7.0\res
-com.example.empedu.app-lifecycle-viewmodel-2.7.0-4 C:\Users\muham\.gradle\caches\transforms-3\46a58b9564182f6cf745640657bf0d24\transformed\lifecycle-viewmodel-2.7.0\res
-com.example.empedu.app-core-runtime-2.2.0-5 C:\Users\muham\.gradle\caches\transforms-3\55cae502cbbcc1a090525ed01850a20f\transformed\core-runtime-2.2.0\res
-com.example.empedu.app-jetified-startup-runtime-1.1.1-6 C:\Users\muham\.gradle\caches\transforms-3\63b29c651472b813d4abf183b4aaa703\transformed\jetified-startup-runtime-1.1.1\res
-com.example.empedu.app-lifecycle-runtime-2.7.0-7 C:\Users\muham\.gradle\caches\transforms-3\68b04505fdc8ee2620704bc6be077158\transformed\lifecycle-runtime-2.7.0\res
-com.example.empedu.app-jetified-tracing-1.2.0-8 C:\Users\muham\.gradle\caches\transforms-3\8bc6529d3ee43424dc2c92f64a652867\transformed\jetified-tracing-1.2.0\res
-com.example.empedu.app-jetified-lifecycle-livedata-core-ktx-2.7.0-9 C:\Users\muham\.gradle\caches\transforms-3\91a356a8d98264537e599cc994856672\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
-com.example.empedu.app-jetified-annotation-experimental-1.4.0-10 C:\Users\muham\.gradle\caches\transforms-3\923a0bc7fce66d1cb8ca1c0a5e9f8be8\transformed\jetified-annotation-experimental-1.4.0\res
+com.example.empedu.app-jetified-play-services-base-18.0.1-0 C:\Users\muham\.gradle\caches\transforms-3\0d2c695a6e6c58e60b2dbf1207771648\transformed\jetified-play-services-base-18.0.1\res
+com.example.empedu.app-jetified-core-common-2.0.3-1 C:\Users\muham\.gradle\caches\transforms-3\22fae1222ad5adc939f1d612ad3b937f\transformed\jetified-core-common-2.0.3\res
+com.example.empedu.app-jetified-lifecycle-process-2.7.0-2 C:\Users\muham\.gradle\caches\transforms-3\2cde72fe132e920ad7a2e2d1624dc792\transformed\jetified-lifecycle-process-2.7.0\res
+com.example.empedu.app-lifecycle-viewmodel-2.7.0-3 C:\Users\muham\.gradle\caches\transforms-3\46a58b9564182f6cf745640657bf0d24\transformed\lifecycle-viewmodel-2.7.0\res
+com.example.empedu.app-core-runtime-2.2.0-4 C:\Users\muham\.gradle\caches\transforms-3\55cae502cbbcc1a090525ed01850a20f\transformed\core-runtime-2.2.0\res
+com.example.empedu.app-jetified-startup-runtime-1.1.1-5 C:\Users\muham\.gradle\caches\transforms-3\63b29c651472b813d4abf183b4aaa703\transformed\jetified-startup-runtime-1.1.1\res
+com.example.empedu.app-lifecycle-runtime-2.7.0-6 C:\Users\muham\.gradle\caches\transforms-3\68b04505fdc8ee2620704bc6be077158\transformed\lifecycle-runtime-2.7.0\res
+com.example.empedu.app-jetified-tracing-1.2.0-7 C:\Users\muham\.gradle\caches\transforms-3\8bc6529d3ee43424dc2c92f64a652867\transformed\jetified-tracing-1.2.0\res
+com.example.empedu.app-jetified-lifecycle-livedata-core-ktx-2.7.0-8 C:\Users\muham\.gradle\caches\transforms-3\91a356a8d98264537e599cc994856672\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
+com.example.empedu.app-jetified-annotation-experimental-1.4.0-9 C:\Users\muham\.gradle\caches\transforms-3\923a0bc7fce66d1cb8ca1c0a5e9f8be8\transformed\jetified-annotation-experimental-1.4.0\res
+com.example.empedu.app-jetified-activity-1.9.3-10 C:\Users\muham\.gradle\caches\transforms-3\9d647e11b8ae95007c49ce5f0cd47034\transformed\jetified-activity-1.9.3\res
 com.example.empedu.app-jetified-play-services-basement-18.4.0-11 C:\Users\muham\.gradle\caches\transforms-3\ab921d2504dc4ffdb3a2cd4464883cfe\transformed\jetified-play-services-basement-18.4.0\res
 com.example.empedu.app-jetified-firebase-common-21.0.0-12 C:\Users\muham\.gradle\caches\transforms-3\ae9174fb2605d2700770c56a341d2036\transformed\jetified-firebase-common-21.0.0\res
 com.example.empedu.app-jetified-core-ktx-1.13.1-13 C:\Users\muham\.gradle\caches\transforms-3\b180998d90889ac916a2146ed7025ca0\transformed\jetified-core-ktx-1.13.1\res
@@ -36,5 +36,8 @@ com.example.empedu.app-packageDebugResources-34 C:\Users\muham\OneDrive\Document
 com.example.empedu.app-merged_res-35 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\app\intermediates\merged_res\debug
 com.example.empedu.app-packaged_res-36 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\firebase_auth\intermediates\packaged_res\debug
 com.example.empedu.app-packaged_res-37 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\firebase_core\intermediates\packaged_res\debug
-com.example.empedu.app-packaged_res-38 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\packaged_res\debug
-com.example.empedu.app-packaged_res-39 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\path_provider_android\intermediates\packaged_res\debug
+com.example.empedu.app-packaged_res-38 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug
+com.example.empedu.app-packaged_res-39 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\packaged_res\debug
+com.example.empedu.app-packaged_res-40 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\image_picker_android\intermediates\packaged_res\debug
+com.example.empedu.app-packaged_res-41 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\path_provider_android\intermediates\packaged_res\debug
+com.example.empedu.app-packaged_res-42 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\permission_handler_android\intermediates\packaged_res\debug

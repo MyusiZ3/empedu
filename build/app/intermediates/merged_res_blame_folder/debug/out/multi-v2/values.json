@@ -4,6 +4,23 @@
             "outputFile": "com.example.empedu.app-mergeDebugResources-33:/values/values.xml",
             "map": [
                 {
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\9d647e11b8ae95007c49ce5f0cd47034\\transformed\\jetified-activity-1.9.3\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,97",
+                        "endColumns": "41,59",
+                        "endOffsets": "92,152"
+                    },
+                    "to": {
+                        "startLines": "136,155",
+                        "startColumns": "4,4",
+                        "startOffsets": "7035,8044",
+                        "endColumns": "41,59",
+                        "endOffsets": "7072,8099"
+                    }
+                },
+                {
                     "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\68b04505fdc8ee2620704bc6be077158\\transformed\\lifecycle-runtime-2.7.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2",
@@ -160,23 +177,6 @@
                         "startOffsets": "8272,10210",
                         "endColumns": "67,166",
                         "endOffsets": "8335,10372"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\09eb6fc27cfb744ce1fc62ab368efa9a\\transformed\\jetified-activity-1.8.1\\res\\values\\values.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,97",
-                        "endColumns": "41,59",
-                        "endOffsets": "92,152"
-                    },
-                    "to": {
-                        "startLines": "136,155",
-                        "startColumns": "4,4",
-                        "startOffsets": "7035,8044",
-                        "endColumns": "41,59",
-                        "endOffsets": "7072,8099"
                     }
                 },
                 {
