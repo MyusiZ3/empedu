@@ -89,23 +89,106 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  /// Save profile data to Firestore
+  // Konfirmasi sebelum ganti email
+  Future<String?> _getPasswordFromUser() async {
+    String? password;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController passwordController = TextEditingController();
+        return AlertDialog(
+          title: Text('Reauthenticate'),
+          content: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: InputDecoration(labelText: 'Enter your password'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                password = passwordController.text.trim();
+                Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(); // Close dialog without setting password
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+    return password;
+  }
+
+// Save profile data to Firestore
   Future<void> _saveProfileToFirestore() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+        String newEmail = _emailController.text.trim();
+        String currentEmail = user.email ?? '';
+
+        // Check if the email has changed
+        if (newEmail != currentEmail) {
+          // Request password from user
+          String? password = await _getPasswordFromUser();
+          if (password == null || password.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text('Password is required for reauthentication.')),
+            );
+            return;
+          }
+
+          // Reauthenticate the user
+          AuthCredential credential = EmailAuthProvider.credential(
+            email: currentEmail,
+            password: password,
+          );
+          await user.reauthenticateWithCredential(credential);
+
+          // Send verification email for new email
+          await user.sendEmailVerification();
+
+          // Inform user to verify email
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('Please verify your new email before updating.')),
+          );
+
+          // You could also wait for the user to verify the email before proceeding
+          // Here you might want to add a delay or a mechanism to check if the email is verified.
+          // For example, checking user.reload() to get updated user info.
+
+          return; // Do not proceed further until email is verified
+
+          // Update email in Firebase Auth after verification
+          await user.updateEmail(newEmail);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Email updated successfully!')),
+          );
+        }
+
+        // Save profile data to Firestore
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
-            {
-              'name': _userNameController.text.trim(),
-              'email': _emailController.text.trim(),
-              'profileimage': _profileImage,
-              'birthdate':
-                  _birthDate, // DateTime will be converted to Firestore Timestamp
-              'gender': selectedGender,
-            },
-            SetOptions(
-                merge:
-                    true)); // Merge: update existing fields without overwriting others
+          {
+            'name': _userNameController.text.trim(),
+            'email': newEmail,
+            'profileimage': _profileImage,
+            'birthdate':
+                _birthDate, // DateTime will be converted to Firestore Timestamp
+            'gender': selectedGender,
+          },
+          SetOptions(
+              merge:
+                  true), // Merge: update existing fields without overwriting others
+        );
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Profile saved successfully!')),
         );
@@ -193,17 +276,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 // Gambar Profil dan Ikon Kamera
                 Positioned(
-                  top: 140, // Atur jarak dari atas
+                  top: 120, // Atur jarak dari atas
                   left: MediaQuery.of(context).size.width / 2 -
-                      60, // Atur posisi tengah
+                      65, // Atur posisi tengah
                   child: GestureDetector(
                     onTap: _pickProfileImage, // Fungsi untuk memilih gambar
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         Container(
-                          width: 120,
-                          height: 120,
+                          width: 130,
+                          height: 130,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
@@ -212,7 +295,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           child: CircleAvatar(
-                            radius: 60,
+                            radius: 70,
                             backgroundImage: _profileImage.startsWith('assets/')
                                 ? AssetImage(_profileImage)
                                 : FileImage(File(_profileImage))
@@ -223,9 +306,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // Ikon Kamera
                         Positioned(
                           top: 0, // Ikon berada di bawah gambar
-                          left: 0, // Ikon berada di kanan bawah
+                          right: 0, // Ikon berada di kanan bawah
                           child: CircleAvatar(
-                            radius: 18, // Ukuran lingkaran ikon kamera
+                            radius: 19, // Ukuran lingkaran ikon kamera
                             backgroundColor:
                                 const Color.fromARGB(255, 150, 186, 247),
                             child: Icon(

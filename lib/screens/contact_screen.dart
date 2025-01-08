@@ -110,11 +110,11 @@ class _ContactScreenState extends State<ContactScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Phone Book',
+          'Contacts',
           style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: const Color(0xff0d1b34),
           ),
           textAlign: TextAlign.center,
         ),
@@ -164,7 +164,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             const Icon(
                               Icons.contact_phone,
                               size: 80,
-                              color: Colors.blue,
+                              color: Color(0xff898de8),
                             ),
                             const SizedBox(height: 20),
                             Text(
@@ -214,19 +214,20 @@ class _ContactScreenState extends State<ContactScreen> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.call,
-                                      color: Colors.green),
+                                      color: Color.fromARGB(255, 92, 195, 95)),
                                   onPressed: () =>
                                       _callContact(contact.phoneNumber),
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.chat,
-                                      color: Colors.blue),
+                                      color: Color(0xff898de8)),
                                   onPressed: () =>
                                       _chatWithContact(contact.phoneNumber),
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete,
-                                      color: Colors.red),
+                                      color:
+                                          Color.fromARGB(255, 244, 131, 123)),
                                   onPressed: () => _deleteContact(contact.id!),
                                 ),
                               ],
@@ -246,7 +247,7 @@ class _ContactScreenState extends State<ContactScreen> {
           });
         },
         child: const Icon(Icons.add, color: Colors.white),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color(0xff898de8),
       ),
     );
   }
