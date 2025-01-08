@@ -1,8 +1,9 @@
 import 'package:empedu/firebase_options.dart'; // Sesuaikan dengan nama package
 import 'package:empedu/pages/login/login.dart'; // Sesuaikan dengan nama package
+import 'package:empedu/pages/signup/signup.dart'; // Jika menggunakan halaman signup
+import 'package:empedu/pages/dashboard/dashboard.dart'; // Jika menggunakan dashboard
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'pages/signup/signup.dart'; // Sesuaikan jika membutuhkan halaman signup
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +23,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:
-          Login(), // Pastikan Login() sudah terdefinisi di folder `pages/login/login.dart`
+      initialRoute: '/login', // Tentukan route awal saat aplikasi dibuka
+      routes: {
+        '/login': (context) => Login(), // Route untuk halaman login
+        // '/signup': (context) => SignUp(), // Jika ada halaman signup
+        '/dashboard': (context) =>
+            DashboardPage(), // Route untuk halaman dashboard
+      },
     );
   }
 }

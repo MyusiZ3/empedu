@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/ime_secondary_split_test_activity.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/ime_secondary_split_test_activity.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/notification_template_part_time.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/notification_action_tombstone.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/toast_custom.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-main-20:/layout/toast_custom.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/notification_template_custom_big.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/ime_base_split_test_activity.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/ime_base_split_test_activity.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/custom_dialog.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/notification_action.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/notification_action.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/notification_template_icon_group.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "io.github.ponnamkarthik.toast.fluttertoast-merged_res-25:/layout/notification_template_part_chronometer.xml",
+        "source": "io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10:/layout/notification_template_part_chronometer.xml"
+    }
+]

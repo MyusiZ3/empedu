@@ -32,6 +32,7 @@
             android:value="2" />
     </application>
         <!-- Permissions untuk mengakses storage pada Android 10 ke atas -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />

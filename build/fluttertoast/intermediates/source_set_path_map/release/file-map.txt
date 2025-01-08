@@ -1,0 +1,27 @@
+io.github.ponnamkarthik.toast.fluttertoast-jetified-activity-1.8.1-0 C:\Users\muham\.gradle\caches\transforms-3\09eb6fc27cfb744ce1fc62ab368efa9a\transformed\jetified-activity-1.8.1\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-lifecycle-process-2.7.0-1 C:\Users\muham\.gradle\caches\transforms-3\2cde72fe132e920ad7a2e2d1624dc792\transformed\jetified-lifecycle-process-2.7.0\res
+io.github.ponnamkarthik.toast.fluttertoast-lifecycle-viewmodel-2.7.0-2 C:\Users\muham\.gradle\caches\transforms-3\46a58b9564182f6cf745640657bf0d24\transformed\lifecycle-viewmodel-2.7.0\res
+io.github.ponnamkarthik.toast.fluttertoast-core-runtime-2.2.0-3 C:\Users\muham\.gradle\caches\transforms-3\55cae502cbbcc1a090525ed01850a20f\transformed\core-runtime-2.2.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-startup-runtime-1.1.1-4 C:\Users\muham\.gradle\caches\transforms-3\63b29c651472b813d4abf183b4aaa703\transformed\jetified-startup-runtime-1.1.1\res
+io.github.ponnamkarthik.toast.fluttertoast-lifecycle-runtime-2.7.0-5 C:\Users\muham\.gradle\caches\transforms-3\68b04505fdc8ee2620704bc6be077158\transformed\lifecycle-runtime-2.7.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-tracing-1.2.0-6 C:\Users\muham\.gradle\caches\transforms-3\8bc6529d3ee43424dc2c92f64a652867\transformed\jetified-tracing-1.2.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-lifecycle-livedata-core-ktx-2.7.0-7 C:\Users\muham\.gradle\caches\transforms-3\91a356a8d98264537e599cc994856672\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-annotation-experimental-1.4.0-8 C:\Users\muham\.gradle\caches\transforms-3\923a0bc7fce66d1cb8ca1c0a5e9f8be8\transformed\jetified-annotation-experimental-1.4.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-core-ktx-1.13.1-9 C:\Users\muham\.gradle\caches\transforms-3\b180998d90889ac916a2146ed7025ca0\transformed\jetified-core-ktx-1.13.1\res
+io.github.ponnamkarthik.toast.fluttertoast-core-1.13.1-10 C:\Users\muham\.gradle\caches\transforms-3\b2884dbf4ee3398b2907745768baeed2\transformed\core-1.13.1\res
+io.github.ponnamkarthik.toast.fluttertoast-lifecycle-livedata-2.7.0-11 C:\Users\muham\.gradle\caches\transforms-3\b5e8ec64b351a2dbc6eeb63e33a53da2\transformed\lifecycle-livedata-2.7.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-savedstate-1.2.1-12 C:\Users\muham\.gradle\caches\transforms-3\c0fc4e28c6277f2c37e3e76e60a9fd75\transformed\jetified-savedstate-1.2.1\res
+io.github.ponnamkarthik.toast.fluttertoast-lifecycle-livedata-core-2.7.0-13 C:\Users\muham\.gradle\caches\transforms-3\d92958aac014ae7818069ff248f54240\transformed\lifecycle-livedata-core-2.7.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-profileinstaller-1.3.1-14 C:\Users\muham\.gradle\caches\transforms-3\e080b70ddc4c24ec0f58ebf52f1f6b5c\transformed\jetified-profileinstaller-1.3.1\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-window-java-1.2.0-15 C:\Users\muham\.gradle\caches\transforms-3\e801b4138ecad13fba43ba1699fe67aa\transformed\jetified-window-java-1.2.0\res
+io.github.ponnamkarthik.toast.fluttertoast-fragment-1.7.1-16 C:\Users\muham\.gradle\caches\transforms-3\e8c3eb223c91c2ae008e94289ad2d3e3\transformed\fragment-1.7.1\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-core-1.0.0-17 C:\Users\muham\.gradle\caches\transforms-3\ea1514a84d657843dfcfb807077cd871\transformed\jetified-core-1.0.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-lifecycle-viewmodel-savedstate-2.7.0-18 C:\Users\muham\.gradle\caches\transforms-3\f14c0432a950b37d2ae35a7a0b4fc805\transformed\jetified-lifecycle-viewmodel-savedstate-2.7.0\res
+io.github.ponnamkarthik.toast.fluttertoast-jetified-window-1.2.0-19 C:\Users\muham\.gradle\caches\transforms-3\f8ec00f3fcc9d3a9a9c66e73a873b76c\transformed\jetified-window-1.2.0\res
+io.github.ponnamkarthik.toast.fluttertoast-main-20 C:\Users\muham\AppData\Local\Pub\Cache\hosted\pub.dev\fluttertoast-8.2.10\android\src\main\res
+io.github.ponnamkarthik.toast.fluttertoast-release-21 C:\Users\muham\AppData\Local\Pub\Cache\hosted\pub.dev\fluttertoast-8.2.10\android\src\release\res
+io.github.ponnamkarthik.toast.fluttertoast-pngs-22 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\generated\res\pngs\release
+io.github.ponnamkarthik.toast.fluttertoast-resValues-23 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\generated\res\resValues\release
+io.github.ponnamkarthik.toast.fluttertoast-mergeReleaseResources-24 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\incremental\release\mergeReleaseResources\merged.dir
+io.github.ponnamkarthik.toast.fluttertoast-mergeReleaseResources-25 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\incremental\release\mergeReleaseResources\stripped.dir
+io.github.ponnamkarthik.toast.fluttertoast-merged_res-26 C:\Users\muham\OneDrive\Documents\Github Proj\empedu\build\fluttertoast\intermediates\merged_res\release
