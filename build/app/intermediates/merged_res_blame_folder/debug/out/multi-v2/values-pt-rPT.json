@@ -4,7 +4,24 @@
             "outputFile": "com.example.empedu.app-mergeDebugResources-33:/values-pt-rPT/values-pt-rPT.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\0d2c695a6e6c58e60b2dbf1207771648\\transformed\\jetified-play-services-base-18.0.1\\res\\values-pt-rPT\\values.xml",
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\5817c6ab20461ca34d4a9e51e2c64148\\transformed\\browser-1.8.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,171,270,382",
+                        "endColumns": "115,98,111,102",
+                        "endOffsets": "166,265,377,480"
+                    },
+                    "to": {
+                        "startLines": "29,30,31,32",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "3360,3476,3575,3687",
+                        "endColumns": "115,98,111,102",
+                        "endOffsets": "3471,3570,3682,3785"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\c84e8a146159499b9c85f9e0df490157\\transformed\\jetified-play-services-base-18.1.0\\res\\values-pt-rPT\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -52,23 +69,6 @@
                         "startOffsets": "294,391,493,592,692,799,905,3790",
                         "endColumns": "96,101,98,99,106,105,120,100",
                         "endOffsets": "386,488,587,687,794,900,1021,3886"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\bb5a5125e57e439427cd66fb993867a0\\transformed\\browser-1.4.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,171,270,382",
-                        "endColumns": "115,98,111,102",
-                        "endOffsets": "166,265,377,480"
-                    },
-                    "to": {
-                        "startLines": "29,30,31,32",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "3360,3476,3575,3687",
-                        "endColumns": "115,98,111,102",
-                        "endOffsets": "3471,3570,3682,3785"
                     }
                 },
                 {

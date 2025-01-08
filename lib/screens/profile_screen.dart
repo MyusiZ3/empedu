@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart'; // For image picking
 import 'dart:io';
 import 'package:intl/intl.dart';
@@ -26,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _getUserInfo();
+    _loadProfileFromFirestore(); // Load profile from Firestore
   }
 
   @override
@@ -35,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
-  /// Get user information from Firebase
+  /// Get user information from Firebase Authentication
   void _getUserInfo() {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -53,7 +55,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _getUserNameFromEmail(String? email) {
     if (email == null) return '';
     String userName = email.split('@')[0];
-    return userName.length > 8 ? userName.substring(0, 5) + '...' : userName;
+    return userName.length > 8 ? userName.substring(0, 8) + '...' : userName;
+  }
+
+  /// Load profile data from Firestore
+  Future<void> _loadProfileFromFirestore() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .get();
+
+        if (snapshot.exists) {
+          Map<String, dynamic> data = snapshot.data()!;
+          setState(() {
+            _userNameController.text = data['name'] ?? '';
+            _emailController.text = data['email'] ?? '';
+            _profileImage = data['profileimage'] ?? 'assets/default_avatar.png';
+            _birthDate = data['birthdate'] != null
+                ? (data['birthdate'] as Timestamp).toDate()
+                : null; // Convert Firestore Timestamp to DateTime
+            selectedGender = data['gender'];
+          });
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load profile: $e')),
+      );
+    }
+  }
+
+  /// Save profile data to Firestore
+  Future<void> _saveProfileToFirestore() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
+            {
+              'name': _userNameController.text.trim(),
+              'email': _emailController.text.trim(),
+              'profileimage': _profileImage,
+              'birthdate':
+                  _birthDate, // DateTime will be converted to Firestore Timestamp
+              'gender': selectedGender,
+            },
+            SetOptions(
+                merge:
+                    true)); // Merge: update existing fields without overwriting others
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Profile saved successfully!')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save profile: $e')),
+      );
+    }
   }
 
   /// Pick profile image from gallery
@@ -67,33 +128,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  /// Update email in Firebase
-  Future<void> _updateEmail(String email) async {
-    try {
-      if (email.endsWith('@gmail.com')) {
-        User? user = FirebaseAuth.instance.currentUser;
-        await user?.updateEmail(email);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Email berhasil diperbarui!')),
-          );
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Email harus menggunakan @gmail.com')),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memperbarui email: $e')),
-        );
-      }
-    }
-  }
-
   /// Show logout confirmation dialog
   void _showLogoutDialog() {
     showDialog(
@@ -101,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Logout'),
-          content: Text('Are you Sure?'),
+          content: Text('Are you sure?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -157,11 +191,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+                // Gambar Profil dan Ikon Kamera
                 Positioned(
-                  top: 140,
-                  left: MediaQuery.of(context).size.width / 2 - 60,
+                  top: 140, // Atur jarak dari atas
+                  left: MediaQuery.of(context).size.width / 2 -
+                      60, // Atur posisi tengah
                   child: GestureDetector(
-                    onTap: _pickProfileImage,
+                    onTap: _pickProfileImage, // Fungsi untuk memilih gambar
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -184,15 +220,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundColor: Colors.grey[300],
                           ),
                         ),
+                        // Ikon Kamera
                         Positioned(
-                          bottom: 10,
-                          right: 5,
+                          top: 0, // Ikon berada di bawah gambar
+                          left: 0, // Ikon berada di kanan bawah
                           child: CircleAvatar(
-                            radius: 16,
-                            backgroundColor: const Color(0xff898de8),
+                            radius: 18, // Ukuran lingkaran ikon kamera
+                            backgroundColor:
+                                const Color.fromARGB(255, 150, 186, 247),
                             child: Icon(
                               Icons.camera_alt,
-                              size: 16,
+                              size: 18, // Ukuran ikon kamera
                               color: Colors.white,
                             ),
                           ),
@@ -203,6 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
+
             SizedBox(height: 100),
             Center(
               child: Text(
@@ -222,7 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 children: [
-                  _buildEditableField('Nama', _userNameController),
+                  _buildEditableField('Name', _userNameController),
                   SizedBox(height: 12),
                   _buildEmailField(),
                   SizedBox(height: 12),
@@ -231,9 +270,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildGenderDropdown(),
                   SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: _showLogoutDialog,
+                    onPressed: _saveProfileToFirestore,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff898de8),
+                      minimumSize: const Size(147, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Save Profile',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontFamily: 'Poppins-Bold',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: _showLogoutDialog,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
                       minimumSize: const Size(147, 48),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -287,32 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildEmailField() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            offset: Offset(0, 3),
-            blurRadius: 6,
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: _emailController,
-        readOnly: !isEditing,
-        onSubmitted: (value) {
-          _updateEmail(value);
-        },
-        decoration: InputDecoration(
-          labelText: 'Email',
-          labelStyle: TextStyle(fontFamily: 'Poppins-Medium', fontSize: 14),
-          border: InputBorder.none,
-        ),
-      ),
-    );
+    return _buildEditableField('Email', _emailController);
   }
 
   Widget _buildDatePickerField(BuildContext context) {
@@ -337,7 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ? DateFormat('dd/MM/yyyy').format(_birthDate!)
                   : 'Date of Birth',
               style: TextStyle(
-                fontFamily: 'Poppins-bold',
+                fontFamily: 'Poppins-Bold',
                 fontSize: 14,
                 color: Color(0xff677294),
               ),

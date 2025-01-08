@@ -16,7 +16,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final List<Widget> _pages = [
     HomeScreen(), // Tetap di dashboard.dart
     ProfileScreen(), // Dipindah ke screens/profile_screen.dart
-    // ContactScreen(), // Dipindah ke screens/contact_screen.dart
+    ContactScreen(), // Pastikan ContactScreen ada di sini
   ];
 
   void _onItemTapped(int index) {

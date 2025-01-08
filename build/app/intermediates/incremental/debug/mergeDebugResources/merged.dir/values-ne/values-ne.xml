@@ -9,7 +9,7 @@
     <string msgid="6107532579223922871" name="call_notification_incoming_text">"आगमन कल"</string>
     <string msgid="8623827134497363134" name="call_notification_ongoing_text">"भइरहेको कल"</string>
     <string msgid="59049573811482460" name="call_notification_screening_text">"आगमन कल जाँचिँदै छ"</string>
-    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">सक्रिय गर्नुहोस्</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">अन गर्नुहोस्</string>
     <string msgid="227660514972886228" name="common_google_play_services_enable_text">%1$s ले तपाईँले Google Play सेवाहरू सक्षम नगरेसम्म काम गर्दैन।</string>
     <string msgid="5122002158466380389" name="common_google_play_services_enable_title">Google Play सेवाहरू सक्षम पार्नुहोस्</string>
     <string msgid="7153882981874058840" name="common_google_play_services_install_button">स्थापना गर्नुहोस्</string>
@@ -27,7 +27,7 @@
     <string name="common_open_on_phone">फोनमा खोल्नुहोस्</string>
     <string name="common_signin_button_text">साइन इन गर्नुहोस्</string>
     <string name="common_signin_button_text_long">Google मार्फत साइन‍ इन गर्नुहोस्</string>
-    <string msgid="3260749812566568062" name="copy_toast_msg">"क्लिपबोर्डमा लिंक प्रतिलिपि गरियो"</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"क्लिपबोर्डमा लिंक कपी गरियो"</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"लिंक प्रतिलिपि गर्नुहोस्"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"ब्राउजरमा खोल्नुहोस्"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"लिंक सेयर गर्नुहोस्"</string>

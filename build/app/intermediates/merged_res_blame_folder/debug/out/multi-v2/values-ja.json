@@ -31,24 +31,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\bb5a5125e57e439427cd66fb993867a0\\transformed\\browser-1.4.0\\res\\values-ja\\values-ja.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,148,243,344",
-                        "endColumns": "92,94,100,94",
-                        "endOffsets": "143,238,339,434"
-                    },
-                    "to": {
-                        "startLines": "29,30,31,32",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "2903,2996,3091,3192",
-                        "endColumns": "92,94,100,94",
-                        "endOffsets": "2991,3086,3187,3282"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\0d2c695a6e6c58e60b2dbf1207771648\\transformed\\jetified-play-services-base-18.0.1\\res\\values-ja\\values.xml",
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\c84e8a146159499b9c85f9e0df490157\\transformed\\jetified-play-services-base-18.1.0\\res\\values-ja\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -62,6 +45,23 @@
                         "startOffsets": "944,1048,1182,1302,1408,1540,1660,1765,1986,2120,2221,2354,2473,2593,2713,2773,2832",
                         "endColumns": "103,133,119,105,131,119,104,98,133,100,132,118,119,119,59,58,70",
                         "endOffsets": "1043,1177,1297,1403,1535,1655,1760,1859,2115,2216,2349,2468,2588,2708,2768,2827,2898"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\5817c6ab20461ca34d4a9e51e2c64148\\transformed\\browser-1.8.0\\res\\values-ja\\values-ja.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,148,243,344",
+                        "endColumns": "92,94,100,94",
+                        "endOffsets": "143,238,339,434"
+                    },
+                    "to": {
+                        "startLines": "29,30,31,32",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2903,2996,3091,3192",
+                        "endColumns": "92,94,100,94",
+                        "endOffsets": "2991,3086,3187,3282"
                     }
                 },
                 {

@@ -84,7 +84,26 @@ class Signup extends StatelessWidget {
                   'assets/ImageLogin.png',
                   height: 150,
                 ),
-                const SizedBox(height: 40),
+                // here
+                const SizedBox(height: 25),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Create your account',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins-semibold',
+                            color: Color(
+                              0xFF7B88FF,
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
                 _emailAddress(),
                 const SizedBox(height: 16),
                 _password(),
@@ -103,23 +122,13 @@ class Signup extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Email Address',
-          style: GoogleFonts.raleway(
-            textStyle: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-            ),
-          ),
-        ),
         const SizedBox(height: 6),
         SizedBox(
           width: 320,
           child: TextField(
             controller: _emailController,
             decoration: InputDecoration(
-              labelText: 'Uremail@gmail.com',
+              labelText: 'Email Address',
               prefixIcon: const Icon(Icons.person),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -138,16 +147,16 @@ class Signup extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Password',
-          style: GoogleFonts.raleway(
-            textStyle: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-            ),
-          ),
-        ),
+        // Text(
+        //   'Password',
+        //   style: GoogleFonts.raleway(
+        //     textStyle: const TextStyle(
+        //       color: Colors.black,
+        //       fontWeight: FontWeight.normal,
+        //       fontSize: 16,
+        //     ),
+        //   ),
+        // ),
         const SizedBox(height: 6),
         SizedBox(
           width: 320,
@@ -174,16 +183,16 @@ class Signup extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Confirm Password',
-          style: GoogleFonts.raleway(
-            textStyle: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-            ),
-          ),
-        ),
+        // Text(
+        //   'Confirm Password',
+        //   style: GoogleFonts.raleway(
+        //     textStyle: const TextStyle(
+        //       color: Colors.black,
+        //       fontWeight: FontWeight.normal,
+        //       fontSize: 16,
+        //     ),
+        //   ),
+        // ),
         const SizedBox(height: 6),
         SizedBox(
           width: 320,

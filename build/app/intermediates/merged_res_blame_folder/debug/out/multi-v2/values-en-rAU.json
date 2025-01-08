@@ -4,6 +4,23 @@
             "outputFile": "com.example.empedu.app-mergeDebugResources-33:/values-en-rAU/values-en-rAU.xml",
             "map": [
                 {
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\5817c6ab20461ca34d4a9e51e2c64148\\transformed\\browser-1.8.0\\res\\values-en-rAU\\values-en-rAU.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,153,250,359",
+                        "endColumns": "97,96,108,98",
+                        "endOffsets": "148,245,354,453"
+                    },
+                    "to": {
+                        "startLines": "11,12,13,14",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "1000,1098,1195,1304",
+                        "endColumns": "97,96,108,98",
+                        "endOffsets": "1093,1190,1299,1398"
+                    }
+                },
+                {
                     "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\b2884dbf4ee3398b2907745768baeed2\\transformed\\core-1.13.1\\res\\values-en-rAU\\values-en-rAU.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
@@ -18,23 +35,6 @@
                         "startOffsets": "281,377,479,578,677,781,884,1403",
                         "endColumns": "95,101,98,98,103,102,115,100",
                         "endOffsets": "372,474,573,672,776,879,995,1499"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\bb5a5125e57e439427cd66fb993867a0\\transformed\\browser-1.4.0\\res\\values-en-rAU\\values-en-rAU.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,153,250,359",
-                        "endColumns": "97,96,108,98",
-                        "endOffsets": "148,245,354,453"
-                    },
-                    "to": {
-                        "startLines": "11,12,13,14",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "1000,1098,1195,1304",
-                        "endColumns": "97,96,108,98",
-                        "endOffsets": "1093,1190,1299,1398"
                     }
                 },
                 {

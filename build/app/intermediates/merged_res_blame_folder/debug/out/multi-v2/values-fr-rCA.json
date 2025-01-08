@@ -4,7 +4,7 @@
             "outputFile": "com.example.empedu.app-mergeDebugResources-33:/values-fr-rCA/values-fr-rCA.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\0d2c695a6e6c58e60b2dbf1207771648\\transformed\\jetified-play-services-base-18.0.1\\res\\values-fr-rCA\\values.xml",
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\c84e8a146159499b9c85f9e0df490157\\transformed\\jetified-play-services-base-18.1.0\\res\\values-fr-rCA\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -18,6 +18,23 @@
                         "startOffsets": "1013,1119,1299,1429,1538,1709,1842,1963,2237,2432,2544,2729,2865,3025,3204,3277,3341",
                         "endColumns": "105,179,129,108,170,132,120,112,194,111,184,135,159,178,72,63,83",
                         "endOffsets": "1114,1294,1424,1533,1704,1837,1958,2071,2427,2539,2724,2860,3020,3199,3272,3336,3420"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\5817c6ab20461ca34d4a9e51e2c64148\\transformed\\browser-1.8.0\\res\\values-fr-rCA\\values-fr-rCA.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,162,264,383",
+                        "endColumns": "106,101,118,104",
+                        "endOffsets": "157,259,378,483"
+                    },
+                    "to": {
+                        "startLines": "29,30,31,32",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "3425,3532,3634,3753",
+                        "endColumns": "106,101,118,104",
+                        "endOffsets": "3527,3629,3748,3853"
                     }
                 },
                 {
@@ -35,23 +52,6 @@
                         "startOffsets": "290,388,490,589,691,795,899,3858",
                         "endColumns": "97,101,98,101,103,103,113,100",
                         "endOffsets": "383,485,584,686,790,894,1008,3954"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\muham\\.gradle\\caches\\transforms-3\\bb5a5125e57e439427cd66fb993867a0\\transformed\\browser-1.4.0\\res\\values-fr-rCA\\values-fr-rCA.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,162,264,383",
-                        "endColumns": "106,101,118,104",
-                        "endOffsets": "157,259,378,483"
-                    },
-                    "to": {
-                        "startLines": "29,30,31,32",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "3425,3532,3634,3753",
-                        "endColumns": "106,101,118,104",
-                        "endOffsets": "3527,3629,3748,3853"
                     }
                 },
                 {

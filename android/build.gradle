@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.1' // Pastikan sesuai dengan versi Gradle yang digunakan
+        classpath 'com.google.gms:google-services:4.3.15' // Google Services Plugin untuk Firebase
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -16,4 +27,3 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-
