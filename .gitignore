@@ -7,3 +7,4 @@
 # Ignore files
 *.apk
 *.sha1
+/build

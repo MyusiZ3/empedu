@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:empedu/screens/profile_screen.dart'; // Import ProfileScreen
 import 'package:empedu/screens/contact_screen.dart'; // Import ContactScreen
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:empedu/pages/chat/chat_dashboard.dart'; // Import ChatDashboardScreen
 import 'package:empedu/screens/home_screen.dart'; // Import HomeScreen
 
 class DashboardPage extends StatefulWidget {
@@ -19,6 +19,7 @@ class _DashboardPageState extends State<DashboardPage> {
     HomeScreen(), // Halaman HomeScreen
     ProfileScreen(), // Halaman ProfileScreen
     ContactScreen(), // Halaman ContactScreen
+    ChatDashboardScreen(), // Halaman ChatDashboard
   ];
 
   /// Fungsi untuk menangani tap pada bottom navigation bar
@@ -46,13 +47,22 @@ class _DashboardPageState extends State<DashboardPage> {
             label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book_rounded),
+            icon: Icon(Icons.contacts_rounded),
             label: 'Contacts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bubble_chart), // Icon untuk Chat
+            label: 'Chat',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xff7b88ff),
+        selectedItemColor:
+            const Color(0xff7b88ff), // Warna untuk ikon yang aktif
+        unselectedItemColor:
+            const Color(0xffA9A9A9), // Warna untuk ikon yang tidak aktif
         onTap: _onItemTapped,
+        backgroundColor:
+            const Color(0xFF646464), // Mengubah background menjadi abu-abu
       ),
     );
   }

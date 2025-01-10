@@ -8,15 +8,23 @@ empedu/
 ├── android/             # Android platform-specific code and configurations
 ├── ios/                 # iOS platform-specific code and configurations
 ├── lib/                 # Main Flutter application source code
+│   ├── database/        # Local Database for contact
 │   ├── models/          # Data models used in the application
+│   ├── screens/         # Main screen ( Home,Profile,contact etc.)
+│   ├── services/        # Authenticated services
 │   ├── pages/           # UI pages (screens) of the application
+│   │   ├── categories/  # Related content UI components
+│   │   ├── chat  /      # chat features
 │   │   ├── login/       # Login-related UI components
 │   │   ├── signup/      # Signup-related UI components
-│   │   └── home/        # Main application dashboard
-│   ├── services/        # Services such as API calls, authentication, etc.
+│   │   ├── home/        # dumy
+│   │   ├── dashboard/   # Main application dashboard
+│   │   └── calculator/  # Calculator feature screen
+│   ├── services/        # Services such as API calls, authentication,CHAT AUTH etc.
 │   ├── utils/           # Utility functions and helpers
 │   ├── widgets/         # Reusable UI components and widgets
-│   └── main.dart        # Entry point of the application
+│   ├── main.dart        # Entry point of the application, route controllers
+│   └── firebase_options.dart # Firebase options
 ├── test/                # Unit and widget tests
 ├── .gitignore           # Git ignore file to exclude unnecessary files from version control
 ├── pubspec.yaml         # Flutter package dependencies
