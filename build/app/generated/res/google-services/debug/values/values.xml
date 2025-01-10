@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="gcm_defaultSenderId" translatable="false">145908719158</string>
-    <string name="google_api_key" translatable="false">AIzaSyC8gZuI-pDS9m8nbwI2ue7drJ_TcMQ-_Qc</string>
-    <string name="google_app_id" translatable="false">1:145908719158:android:ca6fa4961893f0119c8297</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyC8gZuI-pDS9m8nbwI2ue7drJ_TcMQ-_Qc</string>
-    <string name="google_storage_bucket" translatable="false">empedu-a57c3.firebasestorage.app</string>
-    <string name="project_id" translatable="false">empedu-a57c3</string>
-</resources>

@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:empedu/services/chat_service.dart';
+import 'package:empedu/services/chat_services.dart';
 
 class ChatScreen extends StatefulWidget {
-  final String receiverEmail;
+  final String receiverUid; // UID penerima
+  final String receiverEmail; // Email penerima
 
-  const ChatScreen({Key? key, required this.receiverEmail}) : super(key: key);
+  const ChatScreen(
+      {Key? key, required this.receiverUid, required this.receiverEmail})
+      : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -25,9 +28,9 @@ class _ChatScreenState extends State<ChatScreen> {
       // Jika pengguna belum login, arahkan ke halaman login
       Navigator.pushReplacementNamed(context, '/login');
     } else {
-      // Generate chatId berdasarkan email pengirim dan penerima
+      // Generate chatId berdasarkan UID pengirim dan penerima
       _chatId =
-          _chatService.generateChatId(currentUser.email!, widget.receiverEmail);
+          _chatService.generateChatId(currentUser.uid, widget.receiverUid);
     }
   }
 
@@ -38,7 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
       try {
         final currentUser = FirebaseAuth.instance.currentUser;
         if (currentUser != null) {
-          await _chatService.sendMessage(message, widget.receiverEmail);
+          await _chatService.sendMessage(message, widget.receiverUid);
           _messageController.clear();
         }
       } catch (e) {
@@ -50,11 +53,44 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  // Tandai pesan sebagai sudah dibaca
+  void _markMessageAsRead(DocumentSnapshot messageDoc) async {
+    if (!messageDoc['isRead'] &&
+        messageDoc['receiver'] == FirebaseAuth.instance.currentUser!.uid) {
+      await messageDoc.reference.update({'isRead': true});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.receiverEmail), // Menampilkan email penerima
+        title: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('users')
+              .doc(widget.receiverUid)
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading...");
+            }
+
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            }
+
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return Text("User not found");
+            }
+
+            var receiverData = snapshot.data!.data() as Map<String, dynamic>;
+
+            // Pastikan key 'name' ada dan valid
+            String receiverName = receiverData['name'] ?? "No name available";
+
+            return Text(receiverName); // Tampilkan nama atau fallback
+          },
+        ),
       ),
       body: Column(
         children: [
@@ -74,7 +110,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemBuilder: (context, index) {
                     var messageData = messages[index];
                     bool isSender = messageData['sender'] ==
-                        FirebaseAuth.instance.currentUser!.email;
+                        FirebaseAuth.instance.currentUser!.uid;
+
+                    // Tandai pesan sebagai sudah dibaca
+                    _markMessageAsRead(messageData);
+
                     return MessageBubble(
                       message: messageData['message'],
                       isSender: isSender,
@@ -152,7 +192,7 @@ class MessageBubble extends StatelessWidget {
                           color: isSender ? Colors.white : Colors.black,
                         ),
                       ),
-                      if (!isRead)
+                      if (!isRead && !isSender)
                         Padding(
                           padding: const EdgeInsets.only(top: 4.0),
                           child: Icon(

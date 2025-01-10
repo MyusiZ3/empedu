@@ -86,7 +86,37 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Center(child: Text('No Profile Data Found'));
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No Profile Data Found',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Complete your profile first to access all features.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         }
 
         Map<String, dynamic> userData =

@@ -19,7 +19,7 @@ class _DashboardPageState extends State<DashboardPage> {
     HomeScreen(), // Halaman HomeScreen
     ProfileScreen(), // Halaman ProfileScreen
     ContactScreen(), // Halaman ContactScreen
-    ChatDashboardScreen(), // Halaman ChatDashboard
+    ChatDashboardScreen(), // Halaman ChatDashboardScreen
   ];
 
   /// Fungsi untuk menangani tap pada bottom navigation bar

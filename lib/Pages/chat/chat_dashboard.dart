@@ -1,115 +1,125 @@
 import 'package:flutter/material.dart';
-import 'package:empedu/services/chat_service.dart'; // Import ChatService
-import 'package:empedu/pages/chat/chat_screen.dart'; // Halaman untuk chat
-import 'package:google_fonts/google_fonts.dart'; // Untuk penggunaan GoogleFonts
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:empedu/pages/chat/chat_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatDashboardScreen extends StatefulWidget {
+  const ChatDashboardScreen({super.key});
+
   @override
-  _ChatDashboardScreenState createState() => _ChatDashboardScreenState();
+  ChatDashboardScreenState createState() => ChatDashboardScreenState();
 }
 
-class _ChatDashboardScreenState extends State<ChatDashboardScreen> {
+class ChatDashboardScreenState extends State<ChatDashboardScreen> {
   final TextEditingController _emailController = TextEditingController();
-  final ChatService _chatService = ChatService();
-  List<String> _contacts = []; // Daftar email kontak yang terdaftar
-  bool _isAddContactVisible =
-      false; // Variabel untuk kontrol form tambah kontak
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  List<Map<String, dynamic>> _contacts = []; // Ubah tipe menjadi dynamic
+  bool _isAddContactVisible = false;
 
   @override
   void initState() {
     super.initState();
-    _loadContacts(); // Muat daftar kontak saat layar dibuka
+    _loadContacts();
   }
 
-  // Memuat daftar kontak yang disimpan di Firestore
-  _loadContacts() async {
-    List<String> contacts = await _chatService.getContacts();
-    setState(() {
-      _contacts = contacts;
-    });
-  }
+  Future<void> _loadContacts() async {
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      DocumentReference userDocRef =
+          _db.collection('users').doc(currentUser.uid);
 
-  // Menambahkan email ke daftar kontak
-  _addContact() async {
-    String email = _emailController.text.trim();
-    if (email.isNotEmpty && !_contacts.contains(email)) {
-      await _chatService.addContact(email); // Menambahkan email ke Firestore
-      _loadContacts(); // Memperbarui daftar kontak
-      _emailController.clear(); // Kosongkan input setelah menambah kontak
+      // Ambil dokumen pengguna
+      DocumentSnapshot snapshot = await userDocRef.get();
+
+      if (snapshot.exists) {
+        // Cast data ke Map<String, dynamic>
+        Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+
+        // Jika field "contacts" tidak ada, tambahkan secara otomatis
+        if (!userData.containsKey('contacts')) {
+          await userDocRef
+              .update({'contacts': []}); // Tambahkan field contacts kosong
+        }
+
+        // Ambil daftar kontak dari field "contacts"
+        List<dynamic> contacts = userData['contacts'] ?? [];
+        setState(() {
+          _contacts = List<Map<String, dynamic>>.from(contacts);
+        });
+      }
     }
   }
 
-  // Menavigasi ke ChatScreen untuk mulai percakapan
-  _startChat(String contactEmail) {
+  Future<void> _addContact() async {
+    String email = _emailController.text.trim();
+    if (email.isEmpty) return;
+
+    // Cari UID berdasarkan email
+    QuerySnapshot userSnapshot =
+        await _db.collection('users').where('email', isEqualTo: email).get();
+    if (userSnapshot.docs.isNotEmpty) {
+      DocumentSnapshot userDoc = userSnapshot.docs.first;
+      String uid = userDoc.id;
+
+      User? currentUser = _auth.currentUser;
+      if (currentUser != null) {
+        DocumentReference userDocRef =
+            _db.collection('users').doc(currentUser.uid);
+
+        // Ambil dokumen pengguna
+        DocumentSnapshot currentUserSnapshot = await userDocRef.get();
+        Map<String, dynamic> userData =
+            currentUserSnapshot.data() as Map<String, dynamic>;
+
+        // Periksa apakah field "contacts" ada, jika tidak tambahkan
+        if (!userData.containsKey('contacts')) {
+          await userDocRef.update({'contacts': []});
+        }
+
+        // Tambahkan kontak baru ke field "contacts"
+        await userDocRef.update({
+          'contacts': FieldValue.arrayUnion([
+            {'uid': uid, 'email': email}
+          ])
+        });
+
+        _loadContacts(); // Perbarui daftar kontak
+        _emailController.clear(); // Kosongkan input
+      }
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Pengguna dengan email tersebut tidak ditemukan')),
+      );
+    }
+  }
+
+  Future<void> _deleteContact(String uid) async {
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      await _db.collection('users').doc(currentUser.uid).update({
+        'contacts': FieldValue.arrayRemove([
+          {'uid': uid}
+        ])
+      });
+      _loadContacts();
+    }
+  }
+
+  void _startChat(String receiverUid, String receiverEmail) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChatScreen(receiverEmail: contactEmail),
+        builder: (context) => ChatScreen(
+          receiverUid: receiverUid,
+          receiverEmail: receiverEmail,
+        ),
       ),
     );
-  }
-
-  // Menampilkan dialog konfirmasi untuk menghapus kontak
-  _confirmDeleteContact(String contactEmail) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Konfirmasi Hapus Kontak',
-            style: GoogleFonts.poppins(),
-          ),
-          content: Text(
-            'Apakah kamu yakin ingin menghapus kontak $contactEmail?',
-            style: GoogleFonts.poppins(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Menutup dialog
-              },
-              child: Text(
-                'Batal',
-                style: GoogleFonts.poppins(),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                await _deleteContact(contactEmail); // Menghapus kontak
-                Navigator.of(context).pop(); // Menutup dialog
-              },
-              child: Text(
-                'Hapus',
-                style: GoogleFonts.poppins(),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Menghapus kontak dari Firestore
-  _deleteContact(String contactEmail) async {
-    try {
-      await _chatService
-          .deleteContact(contactEmail); // Menghapus kontak di Firestore
-      _loadContacts(); // Memperbarui daftar kontak
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Kontak berhasil dihapus')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus kontak')),
-      );
-    }
-  }
-
-  // Men-toggle visibility form tambah kontak
-  _toggleAddContactForm() {
-    setState(() {
-      _isAddContactVisible = !_isAddContactVisible;
-    });
   }
 
   @override
@@ -131,160 +141,51 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Tampilkan form tambah kontak hanya jika _isAddContactVisible == true
               if (_isAddContactVisible)
                 Column(
                   children: [
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Contact Email',
+                        labelText: 'Email Kontak',
                         prefixIcon: Icon(Icons.email_rounded),
                         border: OutlineInputBorder(),
-                        hintText: 'Insert Contact Email',
+                        hintText: 'Masukkan email kontak',
                       ),
                       style: GoogleFonts.poppins(),
                     ),
                     SizedBox(height: 10),
                     ElevatedButton(
-                      onPressed: _addContact, // Tombol untuk menambah kontak
-                      child: Text('Add Contact', style: GoogleFonts.poppins()),
-                      style: ElevatedButton.styleFrom(
-                        iconColor: const Color(0xff898de8), // Warna tombol
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        textStyle: GoogleFonts.poppins(),
-                      ),
+                      onPressed: _addContact,
+                      child:
+                          Text('Tambah Kontak', style: GoogleFonts.poppins()),
                     ),
                     SizedBox(height: 20),
                   ],
                 ),
-              // Daftar kontak yang sudah ada
               Expanded(
                 child: _contacts.isEmpty
                     ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.chat_bubble_outline,
-                              size: 80,
-                              color: Color(0xff898de8),
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              'Tidak ada kontak',
-                              style: GoogleFonts.poppins(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[700],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        child: Text(
+                          'Tidak ada kontak',
+                          style: GoogleFonts.poppins(),
                         ),
                       )
                     : ListView.builder(
                         itemCount: _contacts.length,
                         itemBuilder: (context, index) {
-                          final contactEmail = _contacts[index];
-                          return FutureBuilder<String>(
-                            future: _chatService.getProfileImage(
-                                contactEmail), // Ambil gambar profil
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return ListTile(
-                                  onTap: () {
-                                    _startChat(
-                                        contactEmail); // Klik untuk mulai chat
-                                  },
-                                  title: Text(
-                                    contactEmail,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  leading: CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: AssetImage(
-                                        'assets/default_avatar.png'), // Gambar default
-                                  ),
-                                  trailing: IconButton(
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: const Color(0xFFF4837B),
-                                    ),
-                                    onPressed: () {
-                                      _confirmDeleteContact(
-                                          contactEmail); // Konfirmasi hapus kontak
-                                    },
-                                  ),
-                                );
-                              } else if (snapshot.hasError ||
-                                  !snapshot.hasData) {
-                                return ListTile(
-                                  onTap: () {
-                                    _startChat(
-                                        contactEmail); // Klik untuk mulai chat
-                                  },
-                                  title: Text(
-                                    contactEmail,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  leading: CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: AssetImage(
-                                        'assets/default_avatar.png'), // Gambar default jika gagal
-                                  ),
-                                  trailing: IconButton(
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: const Color(0xFFF4837B),
-                                    ),
-                                    onPressed: () {
-                                      _confirmDeleteContact(
-                                          contactEmail); // Konfirmasi hapus kontak
-                                    },
-                                  ),
-                                );
-                              } else {
-                                String profileImageUrl = snapshot.data ??
-                                    'assets/default_avatar.png';
-                                return ListTile(
-                                  onTap: () {
-                                    _startChat(
-                                        contactEmail); // Klik untuk mulai chat
-                                  },
-                                  title: Text(
-                                    contactEmail,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  leading: CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: NetworkImage(
-                                        profileImageUrl), // Menampilkan gambar profil dari URL
-                                  ),
-                                  trailing: IconButton(
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: const Color(0xFFF4837B),
-                                    ),
-                                    onPressed: () {
-                                      _confirmDeleteContact(
-                                          contactEmail); // Konfirmasi hapus kontak
-                                    },
-                                  ),
-                                );
-                              }
-                            },
+                          final contact = _contacts[index];
+                          return ListTile(
+                            onTap: () =>
+                                _startChat(contact['uid'], contact['email']),
+                            title: Text(
+                              contact['email'],
+                              style: GoogleFonts.poppins(),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () => _deleteContact(contact['uid']),
+                            ),
                           );
                         },
                       ),
@@ -294,10 +195,16 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _toggleAddContactForm, // Toggle form tambah kontak
-        child: Icon(_isAddContactVisible ? Icons.close : Icons.add,
-            color: Colors.white),
+        onPressed: () {
+          setState(() {
+            _isAddContactVisible = !_isAddContactVisible;
+          });
+        },
         backgroundColor: const Color(0xff898de8),
+        child: Icon(
+          _isAddContactVisible ? Icons.close : Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }

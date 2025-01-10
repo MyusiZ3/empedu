@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Firebase confg
+  firebase_messaging: ^15.2.0
   flutter_secure_storage: ^9.2.3
   firebase_auth: ^5.3.4
   fluttertoast: ^8.2.1
