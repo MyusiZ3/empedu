@@ -11,8 +11,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
   String _searchQuery = ''; // Menyimpan query pencarian
   List<Map<String, dynamic>> _categories = []; // Kategori dari Firestore
+  final FocusNode _searchFocusNode = FocusNode(); // Fokus untuk search bar
 
   @override
   void initState() {
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }).toList();
       });
     } catch (e) {
-      print("Failed to load categories: $e");
+      debugPrint("Failed to load categories: $e");
     }
   }
 
@@ -72,182 +74,189 @@ class _HomeScreenState extends State<HomeScreen> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      return Center(child: Text('No User Logged In'));
+      return const Center(child: Text('No User Logged In'));
     }
 
-    return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Header Greeting dan Avatar
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'No Profile Data Found',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Complete your profile first to access all features.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
-
-        Map<String, dynamic> userData =
-            snapshot.data!.data() as Map<String, dynamic>;
-
-        String userName = userData['name'] ?? 'User';
-        String profileImage =
-            userData['profileimage'] ?? 'assets/default_avatar.png';
-
-        final filteredCategories = _categories
-            .where((category) => category['title']
-                .toLowerCase()
-                .contains(_searchQuery.toLowerCase()))
-            .toList();
-
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Header Greeting dan Avatar
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _getGreeting(),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF898DE8),
-                              ),
-                            ),
-                            Text(
+                        Text(
+                          _getGreeting(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF898DE8),
+                          ),
+                        ),
+                        FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || !snapshot.data!.exists) {
+                              return const Text(
+                                'User',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF898DE8),
+                                ),
+                              );
+                            }
+
+                            Map<String, dynamic> userData =
+                                snapshot.data!.data() as Map<String, dynamic>;
+                            String userName = userData['name'] ?? 'User';
+
+                            return Text(
                               userName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w700,
                                 color: Color(0xFF898DE8),
                               ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
-                        CircleAvatar(
+                      ],
+                    ),
+                    FutureBuilder<DocumentSnapshot>(
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .get(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData || !snapshot.data!.exists) {
+                          return const CircleAvatar(
+                            radius: 30,
+                            backgroundImage:
+                                AssetImage('assets/default_avatar.png'),
+                          );
+                        }
+
+                        Map<String, dynamic> userData =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        String profileImage = userData['profileimage'] ??
+                            'assets/default_avatar.png';
+
+                        return CircleAvatar(
                           radius: 30,
                           backgroundImage: profileImage.startsWith('assets/')
                               ? AssetImage(profileImage)
                               : FileImage(File(profileImage)) as ImageProvider,
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  ),
-
-                  /// Search Bar
-                  const SizedBox(height: 20),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 204, 209, 255),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: TextField(
-                      onChanged: _updateSearchQuery,
-                      decoration: InputDecoration(
-                        hintText: 'Search Lessons...',
-                        hintStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                        ),
-                        prefixIcon: Icon(Icons.search, color: Colors.white),
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      ),
-                    ),
-                  ),
-
-                  /// Kategori
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Categories',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF898DE8),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  /// List Kategori atau Pesan Kosong
-                  if (filteredCategories.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 50),
-                      child: Center(
-                        child: Text(
-                          'Category Not Found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    )
-                  else
-                    Expanded(
-                      child: ListView(
-                        children: filteredCategories.map((category) {
-                          return _buildCategoryCard(
-                            context,
-                            title: category['title'],
-                            lessons: category['lessons'],
-                            color: category['color'],
-                            image: category['image'],
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, category['targetScreen']);
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
+
+              /// Search Bar
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 204, 209, 255),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  focusNode: _searchFocusNode,
+                  onChanged: _updateSearchQuery,
+                  style: const TextStyle(color: Colors.grey), // Abu-abu
+                  decoration: const InputDecoration(
+                    hintText: 'Search Lessons...',
+                    hintStyle: TextStyle(
+                      color: Colors.grey, // Abu-abu untuk hint
+                      fontSize: 13,
+                    ),
+                    prefixIcon: Icon(Icons.search, color: Colors.white),
+                    border: InputBorder.none,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  ),
+                ),
+              ),
+
+              /// Kategori
+              const SizedBox(height: 20),
+              const Text(
+                'Categories',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF898DE8),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              /// List Kategori atau Pesan Kosong
+              Expanded(
+                child: _buildCategoryList(),
+              ),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// List kategori dengan pencarian
+  Widget _buildCategoryList() {
+    final filteredCategories = _categories
+        .where((category) => category['title']
+            .toLowerCase()
+            .contains(_searchQuery.toLowerCase()))
+        .toList();
+
+    if (filteredCategories.isEmpty) {
+      return Center(
+        child: Text(
+          'Category Not Found',
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.grey,
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: filteredCategories.length,
+      itemBuilder: (context, index) {
+        final category = filteredCategories[index];
+        return _buildCategoryCard(
+          context,
+          title: category['title'],
+          lessons: category['lessons'],
+          color: category['color'],
+          image: category['image'],
+          onTap: () {
+            if (category['targetScreen'] != null &&
+                category['targetScreen']!.isNotEmpty) {
+              Navigator.pushNamed(context, category['targetScreen']);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Screen not found!'),
+                ),
+              );
+            }
+          },
         );
       },
     );
