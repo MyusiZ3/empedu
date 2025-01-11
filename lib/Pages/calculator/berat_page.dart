@@ -42,68 +42,8 @@ class _BeratPageState extends State<BeratPage> {
         result = value * 1000;
       } else if (_fromUnit == 'Gram' && _toUnit == 'Carat') {
         result = value * 5;
-      } else if (_fromUnit == 'Pound' && _toUnit == 'Kilogram') {
-        result = value / 2.20462;
-      } else if (_fromUnit == 'Pound' && _toUnit == 'Gram') {
-        result = value * 453.592;
-      } else if (_fromUnit == 'Pound' && _toUnit == 'Ounce') {
-        result = value * 16;
-      } else if (_fromUnit == 'Pound' && _toUnit == 'Ton') {
-        result = value / 2000;
-      } else if (_fromUnit == 'Pound' && _toUnit == 'Milligram') {
-        result = value * 453592;
-      } else if (_fromUnit == 'Pound' && _toUnit == 'Carat') {
-        result = value * 2267.96;
-      } else if (_fromUnit == 'Ounce' && _toUnit == 'Kilogram') {
-        result = value / 35.274;
-      } else if (_fromUnit == 'Ounce' && _toUnit == 'Gram') {
-        result = value * 28.3495;
-      } else if (_fromUnit == 'Ounce' && _toUnit == 'Pound') {
-        result = value / 16;
-      } else if (_fromUnit == 'Ounce' && _toUnit == 'Ton') {
-        result = value / 35273.92;
-      } else if (_fromUnit == 'Ounce' && _toUnit == 'Milligram') {
-        result = value * 28349.5;
-      } else if (_fromUnit == 'Ounce' && _toUnit == 'Carat') {
-        result = value * 1417.48;
-      } else if (_fromUnit == 'Ton' && _toUnit == 'Kilogram') {
-        result = value * 1000;
-      } else if (_fromUnit == 'Ton' && _toUnit == 'Gram') {
-        result = value * 1000000;
-      } else if (_fromUnit == 'Ton' && _toUnit == 'Pound') {
-        result = value * 2000;
-      } else if (_fromUnit == 'Ton' && _toUnit == 'Ounce') {
-        result = value * 35273.92;
-      } else if (_fromUnit == 'Ton' && _toUnit == 'Milligram') {
-        result = value * 1000000000;
-      } else if (_fromUnit == 'Ton' && _toUnit == 'Carat') {
-        result = value * 5000000;
-      } else if (_fromUnit == 'Milligram' && _toUnit == 'Kilogram') {
-        result = value / 1000000;
-      } else if (_fromUnit == 'Milligram' && _toUnit == 'Gram') {
-        result = value / 1000;
-      } else if (_fromUnit == 'Milligram' && _toUnit == 'Pound') {
-        result = value * 0.00000220462;
-      } else if (_fromUnit == 'Milligram' && _toUnit == 'Ounce') {
-        result = value * 0.000035274;
-      } else if (_fromUnit == 'Milligram' && _toUnit == 'Ton') {
-        result = value * 0.000000001;
-      } else if (_fromUnit == 'Milligram' && _toUnit == 'Carat') {
-        result = value * 0.005;
-      } else if (_fromUnit == 'Carat' && _toUnit == 'Kilogram') {
-        result = value / 5000;
-      } else if (_fromUnit == 'Carat' && _toUnit == 'Gram') {
-        result = value / 5;
-      } else if (_fromUnit == 'Carat' && _toUnit == 'Pound') {
-        result = value * 0.000440924;
-      } else if (_fromUnit == 'Carat' && _toUnit == 'Ounce') {
-        result = value * 0.017753;
-      } else if (_fromUnit == 'Carat' && _toUnit == 'Ton') {
-        result = value * 0.000002;
-      } else if (_fromUnit == 'Carat' && _toUnit == 'Milligram') {
-        result = value * 200;
       } else {
-        result = value; // Default case
+        result = value;
       }
 
       setState(() {
@@ -123,25 +63,31 @@ class _BeratPageState extends State<BeratPage> {
         title: Text(
           'Weight Conversion',
           style: TextStyle(
-            fontFamily: 'Raleway',
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: const Color(0xff7b88ff),
           ),
         ),
-        backgroundColor: Colors.grey[800],
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.grey[200]!, Colors.grey[400]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Color(0xff7b88ff),
+            ),
           ),
         ),
-        padding: const EdgeInsets.all(20.0),
+      ),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -149,15 +95,15 @@ class _BeratPageState extends State<BeratPage> {
             Text(
               'Enter Weight',
               style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xff7b88ff),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
-            // Input field
+            const SizedBox(height: 20),
+            // Input Field
             TextField(
               controller: _controller,
               keyboardType: TextInputType.number,
@@ -168,149 +114,75 @@ class _BeratPageState extends State<BeratPage> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon: Icon(Icons.scale, color: Colors.grey[800]),
+                prefixIcon: Icon(Icons.scale, color: const Color(0xff7b88ff)),
                 labelText: 'Weight',
-                labelStyle: TextStyle(color: Colors.grey[700]),
+                labelStyle: TextStyle(color: Colors.grey[600]),
               ),
-              style: TextStyle(
-                fontFamily: 'Raleway',
-                color: Colors.grey[800],
-                fontSize: 16,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                color: Colors.black87,
+                fontSize: 18,
               ),
             ),
-            SizedBox(height: 20),
-            // Dropdowns for unit selection
+            const SizedBox(height: 20),
+            // Dropdowns
             Row(
               children: [
                 Expanded(
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    child: DropdownButton<String>(
-                      value: _fromUnit,
-                      items: [
-                        'Kilogram',
-                        'Gram',
-                        'Pound',
-                        'Ounce',
-                        'Ton',
-                        'Milligram',
-                        'Carat'
-                      ]
-                          .map((unit) => DropdownMenuItem(
-                                value: unit,
-                                child: Text(
-                                  unit,
-                                  style: TextStyle(
-                                    fontFamily: 'Raleway',
-                                    fontSize: 14,
-                                    color: Colors.grey[800],
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _fromUnit = value!;
-                        });
-                      },
-                      underline: SizedBox(),
-                      isExpanded: true,
-                      icon:
-                          Icon(Icons.arrow_drop_down, color: Colors.grey[800]),
-                    ),
+                  child: _buildDropdown(
+                    value: _fromUnit,
+                    onChanged: (value) {
+                      setState(() {
+                        _fromUnit = value!;
+                      });
+                    },
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    child: DropdownButton<String>(
-                      value: _toUnit,
-                      items: [
-                        'Kilogram',
-                        'Gram',
-                        'Pound',
-                        'Ounce',
-                        'Ton',
-                        'Milligram',
-                        'Carat'
-                      ]
-                          .map((unit) => DropdownMenuItem(
-                                value: unit,
-                                child: Text(
-                                  unit,
-                                  style: TextStyle(
-                                    fontFamily: 'Raleway',
-                                    fontSize: 14,
-                                    color: Colors.grey[800],
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _toUnit = value!;
-                        });
-                      },
-                      underline: SizedBox(),
-                      isExpanded: true,
-                      icon:
-                          Icon(Icons.arrow_drop_down, color: Colors.grey[800]),
-                    ),
+                  child: _buildDropdown(
+                    value: _toUnit,
+                    onChanged: (value) {
+                      setState(() {
+                        _toUnit = value!;
+                      });
+                    },
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 30),
             // Convert Button
             ElevatedButton(
               onPressed: _convertWeight,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[800],
+                backgroundColor: const Color(0xff7b88ff),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(vertical: 15),
               ),
-              child: Text(
+              child: const Text(
                 'Convert',
                 style: TextStyle(
-                  fontFamily: 'Raleway',
+                  fontFamily: 'Poppins',
                   fontSize: 18,
                   color: Colors.white,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Conversion Result
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -318,17 +190,65 @@ class _BeratPageState extends State<BeratPage> {
                 _result.isEmpty
                     ? 'The result will appear here'
                     : 'Result: $_result',
-                style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 16,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
+                  color: Color(0xff7b88ff),
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String value,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      child: DropdownButton<String>(
+        value: value,
+        items: [
+          'Kilogram',
+          'Gram',
+          'Pound',
+          'Ounce',
+          'Ton',
+          'Milligram',
+          'Carat',
+        ]
+            .map(
+              (unit) => DropdownMenuItem(
+                value: unit,
+                child: Text(
+                  unit,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+        onChanged: onChanged,
+        underline: const SizedBox(),
+        isExpanded: true,
+        icon: const Icon(Icons.arrow_drop_down, color: Color(0xff7b88ff)),
       ),
     );
   }

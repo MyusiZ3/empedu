@@ -15,6 +15,12 @@ dependencies:
   permission_handler: ^11.3.1 
   google_fonts: ^6.2.1
 
+  # Loginsave
+  shared_preferences: ^2.0.18
+
+  # Youtube Conf
+  youtube_player_flutter: ^9.1.1
+
   # Buku telp
   sqflite: ^2.0.0+3
   url_launcher: ^6.1.7
@@ -40,10 +46,16 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.2
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^5.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/Icon_Apps.png"
 
 flutter:
   uses-material-design: true

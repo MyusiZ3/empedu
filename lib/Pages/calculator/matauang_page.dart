@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Impor intl
+import 'package:intl/intl.dart';
 
 class MataUangPage extends StatefulWidget {
   @override
@@ -12,7 +12,7 @@ class _MataUangPageState extends State<MataUangPage> {
   String _toCurrency = 'IDR';
   String _result = '';
 
-  // Daftar 10 mata uang dengan kode negara untuk bendera
+  // List of 10 currencies with country codes for flags
   final List<Map<String, String>> _currencies = [
     {'code': 'USD', 'country': 'us'},
     {'code': 'IDR', 'country': 'id'},
@@ -31,9 +31,9 @@ class _MataUangPageState extends State<MataUangPage> {
       double rate = _getExchangeRate(_fromCurrency, _toCurrency);
       double convertedAmount = amount * rate;
 
-      // Menggunakan NumberFormat untuk memformat hasil konversi
+      // Format the conversion result
       String formattedResult =
-          NumberFormat('#,###.##', 'id_ID').format(convertedAmount);
+          NumberFormat('#,###.##', 'en_US').format(convertedAmount);
 
       setState(() {
         _result = '$formattedResult $_toCurrency';
@@ -46,53 +46,31 @@ class _MataUangPageState extends State<MataUangPage> {
   }
 
   double _getExchangeRate(String from, String to) {
-    // Simulasi nilai tukar
+    // Simulated exchange rates
     Map<String, double> rates = {
-      'USD-IDR': 15000, // USD ke IDR
-      'IDR-USD': 0.000067, // IDR ke USD
-      'USD-EUR': 0.85, // USD ke EUR
-      'EUR-USD': 1.18, // EUR ke USD
-      'IDR-EUR': 0.000057, // IDR ke EUR
-      'EUR-IDR': 17500, // EUR ke IDR
-      'USD-JPY': 110.0, // USD ke JPY
-      'JPY-USD': 0.0091, // JPY ke USD
-      'IDR-JPY': 0.0064, // IDR ke JPY
-      'JPY-IDR': 1550.0, // JPY ke IDR
-      'EUR-JPY': 129.0, // EUR ke JPY
-      'JPY-EUR': 0.0078, // JPY ke EUR
-      'USD-AUD': 1.35, // USD ke AUD
-      'AUD-USD': 0.74, // AUD ke USD
-      'IDR-AUD': 0.000091, // IDR ke AUD
-      'AUD-IDR': 11000.0, // AUD ke IDR
-      'EUR-AUD': 1.59, // EUR ke AUD
-      'AUD-EUR': 0.63, // AUD ke EUR
-      'USD-CAD': 1.24, // USD ke CAD
-      'CAD-USD': 0.81, // CAD ke USD
-      'IDR-CAD': 0.000083, // IDR ke CAD
-      'CAD-IDR': 12000.0, // CAD ke IDR
-      'EUR-CAD': 1.47, // EUR ke CAD
-      'CAD-EUR': 0.68, // CAD ke EUR
-      'USD-CHF': 0.92, // USD ke CHF
-      'CHF-USD': 1.09, // CHF ke USD
-      'IDR-CHF': 0.000061, // IDR ke CHF
-      'CHF-IDR': 16000.0, // CHF ke IDR
-      'EUR-CHF': 0.98, // EUR ke CHF
-      'CHF-EUR': 1.02, // CHF ke EUR
-      'USD-CNY': 6.45, // USD ke CNY
-      'CNY-USD': 0.155, // CNY ke USD
-      'IDR-CNY': 0.00042, // IDR ke CNY
-      'CNY-IDR': 2350.0, // CNY ke IDR
-      'EUR-CNY': 7.57, // EUR ke CNY
-      'CNY-EUR': 0.13, // CNY ke EUR
-      'USD-SGD': 1.35, // USD ke SGD
-      'SGD-USD': 0.74, // SGD ke USD
-      'IDR-SGD': 0.000048, // IDR ke SGD
-      'SGD-IDR': 21000.0, // SGD ke IDR
-      'EUR-SGD': 1.49, // EUR ke SGD
-      'SGD-EUR': 0.67, // SGD ke EUR
+      'USD-IDR': 15000,
+      'IDR-USD': 0.000067,
+      'USD-EUR': 0.85,
+      'EUR-USD': 1.18,
+      'IDR-EUR': 0.000057,
+      'EUR-IDR': 17500,
+      'USD-JPY': 110.0,
+      'JPY-USD': 0.0091,
+      'IDR-JPY': 0.0064,
+      'JPY-IDR': 1550.0,
+      'USD-AUD': 1.35,
+      'AUD-USD': 0.74,
+      'USD-CAD': 1.24,
+      'CAD-USD': 0.81,
+      'USD-CHF': 0.92,
+      'CHF-USD': 1.09,
+      'USD-CNY': 6.45,
+      'CNY-USD': 0.155,
+      'USD-SGD': 1.35,
+      'SGD-USD': 0.74,
     };
 
-    return rates['$from-$to'] ?? 1.0; // Default jika pasangan tidak ditemukan
+    return rates['$from-$to'] ?? 1.0; // Default if no rate is found
   }
 
   @override
@@ -100,41 +78,49 @@ class _MataUangPageState extends State<MataUangPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Konversi Mata Uang',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: Colors.grey[800],
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.grey[200]!, Colors.grey[400]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+          'Currency Converter',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: const Color(0xff7b88ff),
           ),
         ),
-        padding: const EdgeInsets.all(20.0),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        elevation: 0,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Color(0xff7b88ff),
+            ),
+          ),
+        ),
+      ),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Title
             Text(
-              'Masukkan Jumlah Uang',
+              'Enter Amount',
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xff7b88ff),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 20),
+            // Amount Input
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
@@ -145,139 +131,143 @@ class _MataUangPageState extends State<MataUangPage> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon: Icon(Icons.money, color: Colors.grey[800]),
-                labelText: 'Jumlah',
-                labelStyle: TextStyle(color: Colors.grey[700]),
+                prefixIcon:
+                    Icon(Icons.attach_money, color: const Color(0xff7b88ff)),
+                labelText: 'Amount',
+                labelStyle: TextStyle(color: Colors.grey[600]),
               ),
-              style: TextStyle(color: Colors.grey[800], fontSize: 16),
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                color: Colors.black87,
+                fontSize: 18,
+              ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+            // Dropdowns for currency selection
             Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<String>(
+                  child: _buildCurrencyDropdown(
                     value: _fromCurrency,
-                    items: _currencies
-                        .map((currency) => DropdownMenuItem(
-                              value: currency['code'],
-                              child: Row(
-                                children: [
-                                  Image.network(
-                                    'https://flagcdn.com/w40/${currency['country']}.png',
-                                    width: 30,
-                                    height: 20,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(currency['code']!),
-                                ],
-                              ),
-                            ))
-                        .toList(),
                     onChanged: (value) {
                       setState(() {
                         _fromCurrency = value!;
                       });
                     },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                      labelText: 'Dari',
-                      labelStyle: TextStyle(color: Colors.grey[700]),
-                    ),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: DropdownButtonFormField<String>(
+                  child: _buildCurrencyDropdown(
                     value: _toCurrency,
-                    items: _currencies
-                        .map((currency) => DropdownMenuItem(
-                              value: currency['code'],
-                              child: Row(
-                                children: [
-                                  Image.network(
-                                    'https://flagcdn.com/w40/${currency['country']}.png',
-                                    width: 30,
-                                    height: 20,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(currency['code']!),
-                                ],
-                              ),
-                            ))
-                        .toList(),
                     onChanged: (value) {
                       setState(() {
                         _toCurrency = value!;
                       });
                     },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                      labelText: 'Ke',
-                      labelStyle: TextStyle(color: Colors.grey[700]),
-                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 30),
+            // Convert Button
             ElevatedButton(
               onPressed: _convertCurrency,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[800],
+                backgroundColor: const Color(0xff7b88ff),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(vertical: 15),
               ),
-              child: Text(
-                'Konversi',
+              child: const Text(
+                'Convert',
                 style: TextStyle(
-                  color: Colors.white,
+                  fontFamily: 'Poppins',
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+            // Conversion Result
             Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
-                    blurRadius: 5,
-                    offset: Offset(0, 2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
               child: Text(
                 _result.isEmpty
-                    ? 'Hasil konversi akan tampil di sini'
-                    : 'Hasil: $_result',
-                style: TextStyle(
-                  fontSize: 14,
+                    ? 'The result will appear here'
+                    : 'Result: $_result',
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
+                  color: Color(0xff7b88ff),
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCurrencyDropdown({
+    required String value,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      child: DropdownButton<String>(
+        value: value,
+        items: _currencies.map((currency) {
+          return DropdownMenuItem(
+            value: currency['code'],
+            child: Row(
+              children: [
+                Image.network(
+                  'https://flagcdn.com/w40/${currency['country']}.png',
+                  width: 30,
+                  height: 20,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  currency['code']!,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+        onChanged: onChanged,
+        underline: const SizedBox(),
+        isExpanded: true,
+        icon: const Icon(Icons.arrow_drop_down, color: Color(0xff7b88ff)),
       ),
     );
   }

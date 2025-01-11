@@ -7,7 +7,7 @@ class SuhuPage extends StatefulWidget {
 
 class _SuhuPageState extends State<SuhuPage> {
   final TextEditingController _controller = TextEditingController();
-  String _fromUnit = 'Celcius';
+  String _fromUnit = 'Celsius';
   String _toUnit = 'Fahrenheit';
   String _result = '';
 
@@ -18,15 +18,15 @@ class _SuhuPageState extends State<SuhuPage> {
 
       if (_fromUnit == _toUnit) {
         result = value;
-      } else if (_fromUnit == 'Celcius' && _toUnit == 'Fahrenheit') {
+      } else if (_fromUnit == 'Celsius' && _toUnit == 'Fahrenheit') {
         result = (value * 9 / 5) + 32;
-      } else if (_fromUnit == 'Celcius' && _toUnit == 'Kelvin') {
+      } else if (_fromUnit == 'Celsius' && _toUnit == 'Kelvin') {
         result = value + 273.15;
-      } else if (_fromUnit == 'Fahrenheit' && _toUnit == 'Celcius') {
+      } else if (_fromUnit == 'Fahrenheit' && _toUnit == 'Celsius') {
         result = (value - 32) * 5 / 9;
       } else if (_fromUnit == 'Fahrenheit' && _toUnit == 'Kelvin') {
         result = (value - 32) * 5 / 9 + 273.15;
-      } else if (_fromUnit == 'Kelvin' && _toUnit == 'Celcius') {
+      } else if (_fromUnit == 'Kelvin' && _toUnit == 'Celsius') {
         result = value - 273.15;
       } else if (_fromUnit == 'Kelvin' && _toUnit == 'Fahrenheit') {
         result = (value - 273.15) * 9 / 5 + 32;
@@ -48,44 +48,50 @@ class _SuhuPageState extends State<SuhuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Konversi Suhu',
+        title: const Text(
+          'Temperature',
           style: TextStyle(
-            fontFamily: 'Raleway',
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color(0xff7b88ff),
           ),
         ),
-        backgroundColor: Colors.grey[800],
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.grey[200]!, Colors.grey[400]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Color(0xff7b88ff),
+            ),
           ),
         ),
-        padding: const EdgeInsets.all(20.0),
+      ),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Judul
-            Text(
-              'Masukkan Suhu',
+            // Title
+            const Text(
+              'Enter Temperature',
               style: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff7b88ff),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
-            // Input field
+            const SizedBox(height: 20),
+            // Input Field
             TextField(
               controller: _controller,
               keyboardType: TextInputType.number,
@@ -96,169 +102,146 @@ class _SuhuPageState extends State<SuhuPage> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon: Icon(Icons.thermostat, color: Colors.grey[800]),
-                labelText: 'Suhu',
-                labelStyle: TextStyle(color: Colors.grey[700]),
+                prefixIcon:
+                    const Icon(Icons.thermostat, color: Color(0xff7b88ff)),
+                labelText: 'Temperature',
+                labelStyle: TextStyle(color: Colors.grey[600]),
               ),
-              style: TextStyle(
-                fontFamily: 'Raleway',
-                color: Colors.grey[800],
-                fontSize: 16,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                color: Colors.black87,
+                fontSize: 18,
               ),
             ),
-            SizedBox(height: 20),
-            // Dropdowns untuk unit suhu dengan desain lebih menarik
+            const SizedBox(height: 20),
+            // Dropdowns
             Row(
               children: [
                 Expanded(
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    child: DropdownButton<String>(
-                      value: _fromUnit,
-                      items: ['Celcius', 'Fahrenheit', 'Kelvin']
-                          .map((unit) => DropdownMenuItem(
-                                value: unit,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      unit == 'Celcius'
-                                          ? Icons.ac_unit
-                                          : unit == 'Fahrenheit'
-                                              ? Icons.thermostat
-                                              : Icons.cloud,
-                                      color: Colors.grey[800],
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      unit,
-                                      style: TextStyle(fontFamily: 'Raleway'),
-                                    ),
-                                  ],
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _fromUnit = value!;
-                        });
-                      },
-                      underline: SizedBox(), // Remove default underline
-                      isExpanded: true, // Make it expand
-                      icon:
-                          Icon(Icons.arrow_drop_down, color: Colors.grey[800]),
-                    ),
+                  child: _buildDropdown(
+                    value: _fromUnit,
+                    onChanged: (value) {
+                      setState(() {
+                        _fromUnit = value!;
+                      });
+                    },
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    child: DropdownButton<String>(
-                      value: _toUnit,
-                      items: ['Celcius', 'Fahrenheit', 'Kelvin']
-                          .map((unit) => DropdownMenuItem(
-                                value: unit,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      unit == 'Celcius'
-                                          ? Icons.ac_unit
-                                          : unit == 'Fahrenheit'
-                                              ? Icons.thermostat
-                                              : Icons.cloud,
-                                      color: Colors.grey[800],
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      unit,
-                                      style: TextStyle(fontFamily: 'Raleway'),
-                                    ),
-                                  ],
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _toUnit = value!;
-                        });
-                      },
-                      underline: SizedBox(), // Remove default underline
-                      isExpanded: true, // Make it expand
-                      icon:
-                          Icon(Icons.arrow_drop_down, color: Colors.grey[800]),
-                    ),
+                  child: _buildDropdown(
+                    value: _toUnit,
+                    onChanged: (value) {
+                      setState(() {
+                        _toUnit = value!;
+                      });
+                    },
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            // Tombol Konversi
+            const SizedBox(height: 30),
+            // Convert Button
             ElevatedButton(
               onPressed: _convertTemperature,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[800], // Sesuaikan warna tombol
+                backgroundColor: const Color(0xff7b88ff),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(vertical: 15),
               ),
-              child: Text(
-                'Konversi',
+              child: const Text(
+                'Convert',
                 style: TextStyle(
-                  fontFamily: 'Raleway',
+                  fontFamily: 'Poppins',
                   fontSize: 18,
                   color: Colors.white,
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            // Hasil Konversi
+            const SizedBox(height: 20),
+            // Conversion Result
             Container(
-              padding: EdgeInsets.all(10), // Menurunkan padding
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.white, // Ganti dengan warna putih
-                borderRadius: BorderRadius.circular(10), // Menurunkan radius
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
-                    blurRadius: 8, // Menurunkan blur radius
-                    offset: Offset(0, 4),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
               child: Text(
                 _result.isEmpty
-                    ? 'Hasil akan tampil di sini'
-                    : 'Hasil: $_result',
-                style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 16, // Menurunkan ukuran font
+                    ? 'The result will appear here'
+                    : 'Result: $_result',
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
+                  color: Color(0xff7b88ff),
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String value,
+    required ValueChanged<String?> onChanged,
+  }) {
+    final List<String> units = ['Celsius', 'Fahrenheit', 'Kelvin'];
+    return InputDecorator(
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      child: DropdownButton<String>(
+        value: value,
+        items: units.map((unit) {
+          return DropdownMenuItem(
+            value: unit,
+            child: Row(
+              children: [
+                Icon(
+                  unit == 'Celsius'
+                      ? Icons.ac_unit
+                      : unit == 'Fahrenheit'
+                          ? Icons.thermostat
+                          : Icons.cloud,
+                  color: const Color(0xff7b88ff),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  unit,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+        onChanged: onChanged,
+        underline: const SizedBox(),
+        isExpanded: true,
+        icon: const Icon(Icons.arrow_drop_down, color: Color(0xff7b88ff)),
       ),
     );
   }

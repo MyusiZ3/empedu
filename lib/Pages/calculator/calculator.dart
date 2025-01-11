@@ -107,7 +107,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                       page: MataUangPage(),
                     ),
                     _buildCreativeConversionButton(
-                      icon: Icons.fitness_center,
+                      icon: Icons.monitor_weight,
                       label: 'Weight',
                       color: Color(0xff7b88ff),
                       page: BeratPage(),

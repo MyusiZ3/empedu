@@ -25,7 +25,6 @@ class _ContactScreenState extends State<ContactScreen> {
     _loadContacts();
   }
 
-  // Memuat kontak dari database
   void _loadContacts() async {
     final contacts = await DatabaseHelper.instance.getContacts();
     if (mounted) {
@@ -35,7 +34,6 @@ class _ContactScreenState extends State<ContactScreen> {
     }
   }
 
-  // Menambah kontak baru
   void _addContact() async {
     final name = _nameController.text.trim();
     final phoneNumber = _phoneController.text.trim();
@@ -64,24 +62,29 @@ class _ContactScreenState extends State<ContactScreen> {
     }
   }
 
-  // Menghapus kontak berdasarkan ID
   void _deleteContact(int id) async {
     try {
       await DatabaseHelper.instance.deleteContact(id);
       _loadContacts();
+      _showSnackBar("Contact deleted successfully");
     } catch (e) {
       _showSnackBar("An error occurred: $e");
     }
   }
 
-  // Menampilkan SnackBar
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message, style: GoogleFonts.poppins())),
+      SnackBar(
+        content: Text(
+          message,
+          style: GoogleFonts.poppins(),
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color.fromARGB(255, 167, 170, 237),
+      ),
     );
   }
 
-  // Fungsi untuk panggilan telepon
   Future<void> _callContact(String phoneNumber) async {
     final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
     if (await canLaunchUrl(callUri)) {
@@ -91,7 +94,6 @@ class _ContactScreenState extends State<ContactScreen> {
     }
   }
 
-  // Fungsi untuk chat menggunakan WhatsApp
   Future<void> _chatWithContact(String phoneNumber) async {
     if (phoneNumber.startsWith("08")) {
       phoneNumber = "+62${phoneNumber.substring(1)}";
@@ -105,10 +107,120 @@ class _ContactScreenState extends State<ContactScreen> {
     }
   }
 
+  void _showDeleteConfirmationDialog(Contact contact) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Hanya bisa ditutup dengan tombol
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(
+            "Delete Contact",
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text(
+            "Are you sure you want to delete ${contact.name}?",
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+              },
+              child: Text(
+                "No",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+                _deleteContact(contact.id!); // Hapus kontak
+              },
+              child: Text(
+                "Yes",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red[400],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmCall(String phoneNumber) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(
+            "Make a Call",
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text(
+            "Do you want to call $phoneNumber?",
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+              },
+              child: Text(
+                "No",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+                _callContact(phoneNumber); // Lakukan panggilan
+              },
+              child: Text(
+                "Yes",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xff5cc35f),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
         title: Text(
           'Contacts',
           style: GoogleFonts.poppins(
@@ -116,86 +228,108 @@ class _ContactScreenState extends State<ContactScreen> {
             fontWeight: FontWeight.bold,
             color: const Color(0xff0d1b34),
           ),
-          textAlign: TextAlign.center,
         ),
-        centerTitle: true,
       ),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // Form Tambah Kontak
-              if (_isAddingContact) ...[
-                TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Name',
-                    prefixIcon: Icon(Icons.person),
-                  ),
-                ),
-                TextField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'[0-9+]*'),
+        child: Column(
+          children: [
+            if (_isAddingContact)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        prefixIcon: const Icon(Icons.person),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9+]*')),
+                      ],
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        prefixIcon: const Icon(Icons.phone),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _addContact,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff898de8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        '   Add Contact   ',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number',
-                    prefixIcon: Icon(Icons.phone),
-                  ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _addContact,
-                  child: const Text('Add Contact'),
-                ),
-                const SizedBox(height: 20),
-              ],
-              // Daftar Kontak
-              Expanded(
-                child: _contacts.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.contact_phone,
+              ),
+            Expanded(
+              child: _contacts.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.contact_phone,
                               size: 80,
-                              color: Color(0xff898de8),
+                              color: Color.fromARGB(255, 199, 201, 233)),
+                          const SizedBox(height: 20),
+                          Text(
+                            'Contact list is empty',
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[700],
                             ),
-                            const SizedBox(height: 20),
-                            Text(
-                              'Contact list is empty',
-                              style: GoogleFonts.poppins(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[700],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: _contacts.length,
-                        itemBuilder: (context, index) {
-                          final contact = _contacts[index];
-                          return ListTile(
-                            onTap: () {
-                              // Navigasi ke halaman Edit Contact
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditContactScreen(
-                                    contact: contact,
-                                    onUpdate: _loadContacts,
-                                  ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: _contacts.length,
+                      itemBuilder: (context, index) {
+                        final contact = _contacts[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ListTile(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditContactScreen(
+                                  contact: contact,
+                                  onUpdate: _loadContacts,
                                 ),
-                              );
-                            },
+                              ),
+                            ),
                             title: Text(
                               contact.name,
                               style: GoogleFonts.poppins(
@@ -207,6 +341,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               contact.phoneNumber,
                               style: GoogleFonts.poppins(
                                 fontSize: 14,
+                                color: Colors.grey[600],
                               ),
                             ),
                             trailing: Row(
@@ -214,9 +349,9 @@ class _ContactScreenState extends State<ContactScreen> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.call,
-                                      color: Color.fromARGB(255, 92, 195, 95)),
+                                      color: Color(0xff5cc35f)),
                                   onPressed: () =>
-                                      _callContact(contact.phoneNumber),
+                                      _confirmCall(contact.phoneNumber),
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.chat,
@@ -226,18 +361,18 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete,
-                                      color:
-                                          Color.fromARGB(255, 244, 131, 123)),
-                                  onPressed: () => _deleteContact(contact.id!),
+                                      color: Color(0xfff4837b)),
+                                  onPressed: () =>
+                                      _showDeleteConfirmationDialog(contact),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      ),
-              ),
-            ],
-          ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -246,8 +381,8 @@ class _ContactScreenState extends State<ContactScreen> {
             _isAddingContact = !_isAddingContact;
           });
         },
-        child: const Icon(Icons.add, color: Colors.white),
         backgroundColor: const Color(0xff898de8),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:empedu/pages/categories/math_screen.dart';
 import 'package:empedu/pages/categories/drawing_screen.dart';
 import 'package:empedu/pages/categories/reading_screen.dart';
 import 'package:empedu/pages/calculator/calculator.dart';
+import 'package:empedu/screens/splash_screen.dart'; // Splash Screen
 
 // Import Secure Storage
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -21,29 +22,26 @@ Future<void> main() async {
         DefaultFirebaseOptions.currentPlatform, // Pastikan file ini sudah ada
   );
 
-  // Periksa apakah pengguna sudah login
-  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
-  String? isLoggedIn = await secureStorage.read(key: 'isLoggedIn');
-
-  runApp(MyApp(isLoggedIn: isLoggedIn == 'true'));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final bool isLoggedIn;
-
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: isLoggedIn
-          ? '/dashboard'
-          : '/login', // Tentukan rute awal berdasarkan status login
+      title: 'empEDU',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home:
+          const SplashScreen(), // Tetapkan SplashScreen sebagai halaman pertama
       routes: {
         '/login': (context) => Login(),
-        '/dashboard': (context) => DashboardPage(),
-        'MathScreen': (context) => const MathScreen(), // Cocok dengan Firebase
+        '/dashboard': (context) => const DashboardPage(),
+        'MathScreen': (context) => const MathScreen(),
         'DrawingScreen': (context) => const DrawingScreen(),
         'CalculatorPage': (context) => CalculatorPage(),
         'ReadingScreen': (context) => const ReadingScreen(),
