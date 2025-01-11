@@ -121,7 +121,7 @@ class _BeratPageState extends State<BeratPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Konversi Berat',
+          'Weight Conversion',
           style: TextStyle(
             fontFamily: 'Raleway',
             fontWeight: FontWeight.bold,
@@ -145,9 +145,9 @@ class _BeratPageState extends State<BeratPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Judul
+            // Title
             Text(
-              'Masukkan Berat',
+              'Enter Weight',
               style: TextStyle(
                 fontFamily: 'Raleway',
                 fontSize: 18,
@@ -169,7 +169,7 @@ class _BeratPageState extends State<BeratPage> {
                   borderSide: BorderSide.none,
                 ),
                 prefixIcon: Icon(Icons.scale, color: Colors.grey[800]),
-                labelText: 'Berat',
+                labelText: 'Weight',
                 labelStyle: TextStyle(color: Colors.grey[700]),
               ),
               style: TextStyle(
@@ -179,7 +179,7 @@ class _BeratPageState extends State<BeratPage> {
               ),
             ),
             SizedBox(height: 20),
-            // Dropdowns untuk unit berat dengan simbol dalam kurung
+            // Dropdowns for unit selection
             Row(
               children: [
                 Expanded(
@@ -207,26 +207,13 @@ class _BeratPageState extends State<BeratPage> {
                       ]
                           .map((unit) => DropdownMenuItem(
                                 value: unit,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '(${unit == 'Kilogram' ? 'kg' : unit == 'Gram' ? 'g' : unit == 'Pound' ? 'lb' : unit == 'Ounce' ? 'oz' : unit == 'Ton' ? 't' : unit == 'Milligram' ? 'mg' : 'ct'})',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey[800],
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      unit,
-                                      style: TextStyle(
-                                        fontFamily: 'Raleway',
-                                        fontSize: 14,
-                                        color: Colors.grey[800],
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  unit,
+                                  style: TextStyle(
+                                    fontFamily: 'Raleway',
+                                    fontSize: 14,
+                                    color: Colors.grey[800],
+                                  ),
                                 ),
                               ))
                           .toList(),
@@ -268,26 +255,13 @@ class _BeratPageState extends State<BeratPage> {
                       ]
                           .map((unit) => DropdownMenuItem(
                                 value: unit,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '(${unit == 'Kilogram' ? 'kg' : unit == 'Gram' ? 'g' : unit == 'Pound' ? 'lb' : unit == 'Ounce' ? 'oz' : unit == 'Ton' ? 't' : unit == 'Milligram' ? 'mg' : 'ct'})',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey[800],
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      unit,
-                                      style: TextStyle(
-                                        fontFamily: 'Raleway',
-                                        fontSize: 14,
-                                        color: Colors.grey[800],
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  unit,
+                                  style: TextStyle(
+                                    fontFamily: 'Raleway',
+                                    fontSize: 14,
+                                    color: Colors.grey[800],
+                                  ),
                                 ),
                               ))
                           .toList(),
@@ -306,7 +280,7 @@ class _BeratPageState extends State<BeratPage> {
               ],
             ),
             SizedBox(height: 20),
-            // Tombol Konversi
+            // Convert Button
             ElevatedButton(
               onPressed: _convertWeight,
               style: ElevatedButton.styleFrom(
@@ -317,7 +291,7 @@ class _BeratPageState extends State<BeratPage> {
                 padding: EdgeInsets.symmetric(vertical: 15),
               ),
               child: Text(
-                'Konversi',
+                'Convert',
                 style: TextStyle(
                   fontFamily: 'Raleway',
                   fontSize: 18,
@@ -326,7 +300,7 @@ class _BeratPageState extends State<BeratPage> {
               ),
             ),
             SizedBox(height: 20),
-            // Hasil Konversi
+            // Conversion Result
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -342,8 +316,8 @@ class _BeratPageState extends State<BeratPage> {
               ),
               child: Text(
                 _result.isEmpty
-                    ? 'Hasil akan tampil di sini'
-                    : 'Hasil: $_result',
+                    ? 'The result will appear here'
+                    : 'Result: $_result',
                 style: TextStyle(
                   fontFamily: 'Raleway',
                   fontSize: 16,

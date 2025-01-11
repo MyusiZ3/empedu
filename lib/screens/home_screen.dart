@@ -177,11 +177,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   controller: _searchController,
                   focusNode: _searchFocusNode,
                   onChanged: _updateSearchQuery,
-                  style: const TextStyle(color: Colors.grey), // Abu-abu
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255)), // Abu-abu
                   decoration: const InputDecoration(
                     hintText: 'Search Lessons...',
                     hintStyle: TextStyle(
-                      color: Colors.grey, // Abu-abu untuk hint
+                      color: Color.fromARGB(
+                          255, 255, 255, 255), // Abu-abu untuk hint
                       fontSize: 13,
                     ),
                     prefixIcon: Icon(Icons.search, color: Colors.white),

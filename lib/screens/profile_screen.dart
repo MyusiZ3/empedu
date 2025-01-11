@@ -168,10 +168,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return; // Do not proceed further until email is verified
 
           // Update email in Firebase Auth after verification
-          await user.updateEmail(newEmail);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Email updated successfully!')),
-          );
         }
 
         // Save profile data to Firestore

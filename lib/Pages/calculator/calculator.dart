@@ -1,9 +1,11 @@
+import 'package:empedu/pages/calculator/berat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:expressions/expressions.dart';
+import 'package:intl/intl.dart'; // Untuk format angka dengan koma
 
 import 'suhu_page.dart';
 import 'matauang_page.dart';
-import 'berat_page.dart';
+import 'package:empedu/pages/calculator/berat_page.dart';
 
 class CalculatorPage extends StatefulWidget {
   @override
@@ -28,7 +30,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
   void _calculateResult() {
     try {
       setState(() {
-        _input = _evaluateExpression(_input);
+        String result = _evaluateExpression(_input);
+        _input = _formatWithCommas(result); // Format hasil dengan koma
       });
     } catch (e) {
       setState(() {
@@ -54,6 +57,18 @@ class _CalculatorPageState extends State<CalculatorPage> {
     }
   }
 
+  /// Fungsi untuk memformat angka dengan koma (1,000 / 10,000)
+  String _formatWithCommas(String input) {
+    if (input == 'Error') return input; // Jika error, kembalikan langsung
+    try {
+      final number = double.parse(input.replaceAll(',', '')); // Parsing angka
+      final formatter = NumberFormat('#,###'); // Format dengan koma
+      return formatter.format(number);
+    } catch (e) {
+      return input; // Jika parsing gagal, kembalikan input asli
+    }
+  }
+
   void _showConversionPopup() {
     showDialog(
       context: context,
@@ -69,11 +84,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  "Pilih Konversi",
+                  "Choose Conversion",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[800], // Elegan
+                    color: Colors.grey[800],
                   ),
                 ),
                 Row(
@@ -81,20 +96,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   children: [
                     _buildCreativeConversionButton(
                       icon: Icons.thermostat_outlined,
-                      label: 'Suhu',
-                      color: Colors.blueGrey[100]!,
+                      label: 'Temperature',
+                      color: Color(0xff7b88ff),
                       page: SuhuPage(),
                     ),
                     _buildCreativeConversionButton(
                       icon: Icons.attach_money,
-                      label: 'Mata Uang',
-                      color: Colors.green[100]!,
+                      label: 'Currency',
+                      color: Color(0xff7b88ff),
                       page: MataUangPage(),
                     ),
                     _buildCreativeConversionButton(
                       icon: Icons.fitness_center,
-                      label: 'Berat',
-                      color: Colors.pink[100]!,
+                      label: 'Weight',
+                      color: Color(0xff7b88ff),
                       page: BeratPage(),
                     ),
                   ],
@@ -144,7 +159,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[800], // Elegan
+              color: Colors.grey[800],
             ),
           ),
         ],
@@ -156,76 +171,101 @@ class _CalculatorPageState extends State<CalculatorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white, // Latar belakang AppBar putih
-        elevation: 0, // Menghilangkan border bagian atas
+        backgroundColor: Colors.white,
+        elevation: 0,
         centerTitle: true,
         title: IconButton(
-          icon: Icon(Icons.swap_horiz, color: Colors.blueGrey[700]),
+          icon: Icon(Icons.swap_horiz, color: Color(0xff7b88ff)),
           onPressed: _showConversionPopup,
         ),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(left: 16),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            padding: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Color(0xff7b88ff),
+            ),
+          ),
+        ),
       ),
-      backgroundColor: Colors.white, // Latar belakang keseluruhan putih
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          Expanded(
+          // Display area (Proportional Flex)
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4, // 40% dari layar
             child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text(
-                        _input,
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700], // Elegan
-                        ),
+              padding: EdgeInsets.all(30),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  _input,
+                  style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff7b88ff),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Buttons area
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color(0xfff5f5f5),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: 16,
+                itemBuilder: (context, index) {
+                  final buttonText = _getButtonText(index);
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: buttonText == 'C' || buttonText == '='
+                          ? Color(0xff7b88ff)
+                          : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                      shadowColor: Colors.black26,
+                    ),
+                    onPressed: () {
+                      if (buttonText == 'C') {
+                        _clearInput();
+                      } else if (buttonText == '=') {
+                        _calculateResult();
+                      } else {
+                        _appendToInput(buttonText);
+                      }
+                    },
+                    child: Text(
+                      buttonText,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: buttonText == 'C' || buttonText == '='
+                            ? Colors.white
+                            : Color(0xff7b88ff),
                       ),
                     ),
-                  ),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: 16,
-                    itemBuilder: (context, index) {
-                      final buttonText = _getButtonText(index);
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.grey[300], // Soft grey for normal buttons
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                100), // Rounded corners for buttons
-                          ),
-                        ),
-                        onPressed: () {
-                          if (buttonText == 'C') {
-                            _clearInput();
-                          } else if (buttonText == '=') {
-                            _calculateResult();
-                          } else {
-                            _appendToInput(buttonText);
-                          }
-                        },
-                        child: Text(
-                          buttonText,
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: buttonText == 'C' || buttonText == '='
-                                ? Colors.red[600] // Red for 'C' and '=' text
-                                : Colors.black,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ),
@@ -251,7 +291,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
       'C',
       '0',
       '=',
-      '+'
+      '+',
     ];
     return buttons[index];
   }
