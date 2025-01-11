@@ -1,210 +1,247 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:empedu/pages/chat/chat_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:empedu/Pages/chat/chat_page.dart';
 
-class ChatDashboardScreen extends StatefulWidget {
-  const ChatDashboardScreen({super.key});
-
+class ChatDashboard extends StatefulWidget {
   @override
-  ChatDashboardScreenState createState() => ChatDashboardScreenState();
+  _ChatDashboardState createState() => _ChatDashboardState();
 }
 
-class ChatDashboardScreenState extends State<ChatDashboardScreen> {
+class _ChatDashboardState extends State<ChatDashboard> {
   final TextEditingController _emailController = TextEditingController();
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final TextEditingController _searchController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  List<Map<String, dynamic>> _contacts = []; // Ubah tipe menjadi dynamic
-  bool _isAddContactVisible = false;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<Map<String, dynamic>> _contacts = [];
+  String _currentUserId = '';
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    _getCurrentUser();
     _loadContacts();
   }
 
-  Future<void> _loadContacts() async {
-    User? currentUser = _auth.currentUser;
-    if (currentUser != null) {
-      DocumentReference userDocRef =
-          _db.collection('users').doc(currentUser.uid);
-
-      // Ambil dokumen pengguna
-      DocumentSnapshot snapshot = await userDocRef.get();
-
-      if (snapshot.exists) {
-        // Cast data ke Map<String, dynamic>
-        Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
-
-        // Jika field "contacts" tidak ada, tambahkan secara otomatis
-        if (!userData.containsKey('contacts')) {
-          await userDocRef
-              .update({'contacts': []}); // Tambahkan field contacts kosong
-        }
-
-        // Ambil daftar kontak dari field "contacts"
-        List<dynamic> contacts = userData['contacts'] ?? [];
-        setState(() {
-          _contacts = List<Map<String, dynamic>>.from(contacts);
-        });
-      }
+  Future<void> _getCurrentUser() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      setState(() {
+        _currentUserId = user.uid;
+      });
     }
   }
 
-  Future<void> _addContact() async {
-    String email = _emailController.text.trim();
-    if (email.isEmpty) return;
+  Future<void> _loadContacts() async {
+    setState(() {
+      _isLoading = true;
+    });
 
-    // Cari UID berdasarkan email
-    QuerySnapshot userSnapshot =
-        await _db.collection('users').where('email', isEqualTo: email).get();
-    if (userSnapshot.docs.isNotEmpty) {
-      DocumentSnapshot userDoc = userSnapshot.docs.first;
-      String uid = userDoc.id;
+    final userDoc =
+        await _firestore.collection('users').doc(_currentUserId).get();
 
-      User? currentUser = _auth.currentUser;
-      if (currentUser != null) {
-        DocumentReference userDocRef =
-            _db.collection('users').doc(currentUser.uid);
+    if (userDoc.exists) {
+      if (!userDoc.data()!.containsKey('contacts')) {
+        // Jika field 'contacts' tidak ada, tambahkan secara otomatis
+        await _firestore.collection('users').doc(_currentUserId).set({
+          'contacts': [],
+        }, SetOptions(merge: true)); // Merge agar tidak menimpa data lain
+      }
 
-        // Ambil dokumen pengguna
-        DocumentSnapshot currentUserSnapshot = await userDocRef.get();
-        Map<String, dynamic> userData =
-            currentUserSnapshot.data() as Map<String, dynamic>;
+      final contactEmails = List<String>.from(userDoc['contacts'] ?? []);
+      if (contactEmails.isNotEmpty) {
+        final contactDocs = await _firestore
+            .collection('users')
+            .where('email', whereIn: contactEmails)
+            .get();
 
-        // Periksa apakah field "contacts" ada, jika tidak tambahkan
-        if (!userData.containsKey('contacts')) {
-          await userDocRef.update({'contacts': []});
-        }
-
-        // Tambahkan kontak baru ke field "contacts"
-        await userDocRef.update({
-          'contacts': FieldValue.arrayUnion([
-            {'uid': uid, 'email': email}
-          ])
+        setState(() {
+          _contacts = contactDocs.docs
+              .map((doc) => {'id': doc.id, ...doc.data()!})
+              .toList();
+          _isLoading = false;
         });
-
-        _loadContacts(); // Perbarui daftar kontak
-        _emailController.clear(); // Kosongkan input
+      } else {
+        setState(() {
+          _contacts = [];
+          _isLoading = false;
+        });
       }
     } else {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Pengguna dengan email tersebut tidak ditemukan')),
-      );
+      setState(() {
+        _contacts = [];
+        _isLoading = false;
+      });
     }
   }
 
-  Future<void> _deleteContact(String uid) async {
-    User? currentUser = _auth.currentUser;
-    if (currentUser != null) {
-      await _db.collection('users').doc(currentUser.uid).update({
-        'contacts': FieldValue.arrayRemove([
-          {'uid': uid}
-        ])
+  Future<void> _addContact(String email) async {
+    final contactDoc = await _firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+
+    if (contactDoc.docs.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('User not found')),
+      );
+      return;
+    }
+
+    final contactId = contactDoc.docs.first.id;
+
+    final userDoc =
+        await _firestore.collection('users').doc(_currentUserId).get();
+
+    List<String> contacts =
+        userDoc.exists && userDoc.data()!.containsKey('contacts')
+            ? List<String>.from(userDoc['contacts'])
+            : [];
+
+    if (contacts.contains(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Contact already exists')),
+      );
+      return;
+    }
+
+    contacts.add(email);
+
+    await _firestore.collection('users').doc(_currentUserId).set({
+      'contacts': contacts,
+    }, SetOptions(merge: true)); // Merge agar tidak menimpa data lain
+
+    _loadContacts();
+  }
+
+  Future<void> _deleteContact(String email) async {
+    final userDoc =
+        await _firestore.collection('users').doc(_currentUserId).get();
+
+    if (userDoc.exists && userDoc['contacts'] != null) {
+      List<String> contacts = List<String>.from(userDoc['contacts']);
+      contacts.remove(email);
+
+      await _firestore.collection('users').doc(_currentUserId).update({
+        'contacts': contacts,
       });
+
       _loadContacts();
     }
-  }
-
-  void _startChat(String receiverUid, String receiverEmail) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChatScreen(
-          receiverUid: receiverUid,
-          receiverEmail: receiverEmail,
-        ),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Chat Dashboard',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xff0d1b34),
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              if (_isAddContactVisible)
-                Column(
-                  children: [
-                    TextField(
+        title: Text('Chat Dashboard'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text('Add Contact'),
+                    content: TextField(
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: 'Email Kontak',
-                        prefixIcon: Icon(Icons.email_rounded),
-                        border: OutlineInputBorder(),
-                        hintText: 'Masukkan email kontak',
+                      decoration: InputDecoration(hintText: 'Enter email'),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel'),
                       ),
-                      style: GoogleFonts.poppins(),
-                    ),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: _addContact,
-                      child:
-                          Text('Tambah Kontak', style: GoogleFonts.poppins()),
-                    ),
-                    SizedBox(height: 20),
-                  ],
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _addContact(_emailController.text.trim());
+                          _emailController.clear();
+                        },
+                        child: Text('Add'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: 'Search contacts...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              Expanded(
-                child: _contacts.isEmpty
-                    ? Center(
-                        child: Text(
-                          'Tidak ada kontak',
-                          style: GoogleFonts.poppins(),
+              ),
+              onChanged: (value) {
+                setState(() {});
+              },
+            ),
+          ),
+          _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: _contacts.length,
+                    itemBuilder: (context, index) {
+                      final contact = _contacts[index];
+                      final searchQuery = _searchController.text.toLowerCase();
+                      if (searchQuery.isNotEmpty &&
+                          !contact['name']
+                              .toLowerCase()
+                              .contains(searchQuery) &&
+                          !contact['email']
+                              .toLowerCase()
+                              .contains(searchQuery)) {
+                        return Container();
+                      }
+
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: contact['profileimage'] != null &&
+                                  contact['profileimage'].isNotEmpty
+                              ? NetworkImage(contact['profileimage'])
+                              : AssetImage('assets/default_avatar.png')
+                                  as ImageProvider,
                         ),
-                      )
-                    : ListView.builder(
-                        itemCount: _contacts.length,
-                        itemBuilder: (context, index) {
-                          final contact = _contacts[index];
-                          return ListTile(
-                            onTap: () =>
-                                _startChat(contact['uid'], contact['email']),
-                            title: Text(
-                              contact['email'],
-                              style: GoogleFonts.poppins(),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () => _deleteContact(contact['uid']),
+                        title: Text(contact['name']),
+                        subtitle: Text(contact['email']),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            _deleteContact(contact['email']);
+                          },
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChatPage(
+                                contactId: contact['id'],
+                                contactName: contact['name'],
+                                contactEmail: contact['email'],
+                                contactImage: contact['profileimage'] ?? '',
+                              ),
                             ),
                           );
                         },
-                      ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _isAddContactVisible = !_isAddContactVisible;
-          });
-        },
-        backgroundColor: const Color(0xff898de8),
-        child: Icon(
-          _isAddContactVisible ? Icons.close : Icons.add,
-          color: Colors.white,
-        ),
+                      );
+                    },
+                  ),
+                ),
+        ],
       ),
     );
   }
