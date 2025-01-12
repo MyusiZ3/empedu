@@ -4,7 +4,7 @@ Empedu is a Flutter-based mobile application aimed at managing educational tasks
 
 This project was created to fulfill the Multimedia Mobile Device Programming course
 
-# This project was made  By : 
+## This project was made  By : 
 - Muhamad Sidik (7708220034)
 - Zahra Imani (7708223086)
 
