@@ -1,8 +1,9 @@
+// Ini dah fixxxxx jangan diubah
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart'; // Untuk format timestamp
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatRoomId;
@@ -105,13 +106,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 : 'Sending...';
 
             return Container(
-              margin: const EdgeInsets.symmetric(
-                  vertical: 5, horizontal: 16), // Margin luar
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
               child: Align(
                 alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 12), // Padding dalam bubble
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: isMe ? const Color(0xff898de8) : Colors.white,
                     borderRadius: BorderRadius.only(
@@ -129,8 +129,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                   constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width *
-                        0.7, // Maksimal 70% lebar layar
+                    maxWidth: MediaQuery.of(context).size.width * 0.7,
                   ),
                   child: Column(
                     crossAxisAlignment: isMe
@@ -231,6 +230,9 @@ class _ChatScreenState extends State<ChatScreen> {
         'lastTimestamp': FieldValue.serverTimestamp(),
       });
 
+      // Tambahkan otomatis ke daftar kontak pengirim dan penerima
+      await _autoAddContact(_currentUser!.email!, widget.receiverEmail);
+
       _messageController.clear();
     } catch (e) {
       debugPrint('Error sending message: $e');
@@ -239,6 +241,41 @@ class _ChatScreenState extends State<ChatScreen> {
           SnackBar(content: Text('Failed to send message: $e')),
         );
       }
+    }
+  }
+
+  /// Fungsi auto-add kontak
+  Future<void> _autoAddContact(String senderEmail, String receiverEmail) async {
+    try {
+      final senderDoc =
+          FirebaseFirestore.instance.collection('users').doc(_currentUser!.uid);
+      final receiverQuery = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: receiverEmail)
+          .get();
+
+      // Tambahkan ke kontak sender
+      await senderDoc.set(
+        {
+          'contacts': FieldValue.arrayUnion([receiverEmail])
+        },
+        SetOptions(merge: true),
+      );
+
+      // Tambahkan ke kontak receiver
+      if (receiverQuery.docs.isNotEmpty) {
+        final receiverDoc = FirebaseFirestore.instance
+            .collection('users')
+            .doc(receiverQuery.docs.first.id);
+        await receiverDoc.set(
+          {
+            'contacts': FieldValue.arrayUnion([senderEmail])
+          },
+          SetOptions(merge: true),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error auto-adding contact: $e');
     }
   }
 }
