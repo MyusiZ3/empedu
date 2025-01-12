@@ -124,7 +124,7 @@ class AuthService {
       } else if (e.code == 'wrong-password') {
         message = 'Wrong password provided for that user.';
       } else {
-        message = 'An unexpected error occurred: ${e.message}';
+        message = 'Email or Password Wrong: ${e.message}';
       }
 
       if (context.mounted) {

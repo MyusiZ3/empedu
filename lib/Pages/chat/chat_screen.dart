@@ -104,47 +104,56 @@ class _ChatScreenState extends State<ChatScreen> {
                 ? DateFormat('hh:mm a').format(timestamp)
                 : 'Sending...';
 
-            return Align(
-              alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isMe ? const Color(0xff898de8) : Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(isMe ? 10 : 0),
-                    topRight: Radius.circular(isMe ? 0 : 10),
-                    bottomLeft: const Radius.circular(10),
-                    bottomRight: const Radius.circular(10),
+            return Container(
+              margin: const EdgeInsets.symmetric(
+                  vertical: 5, horizontal: 16), // Margin luar
+              child: Align(
+                alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 12), // Padding dalam bubble
+                  decoration: BoxDecoration(
+                    color: isMe ? const Color(0xff898de8) : Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(isMe ? 10 : 0),
+                      topRight: Radius.circular(isMe ? 0 : 10),
+                      bottomLeft: const Radius.circular(15),
+                      bottomRight: const Radius.circular(15),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        blurRadius: 5,
+                        spreadRadius: 3,
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      blurRadius: 5,
-                      spreadRadius: 3,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment:
-                      isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      message['message'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: isMe ? Colors.white : Colors.black87,
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width *
+                        0.7, // Maksimal 70% lebar layar
+                  ),
+                  child: Column(
+                    crossAxisAlignment: isMe
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        message['message'],
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          color: isMe ? Colors.white : Colors.black87,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      formattedTime,
-                      style: GoogleFonts.poppins(
-                        fontSize: 10,
-                        color: isMe ? Colors.white70 : Colors.grey[600],
+                      const SizedBox(height: 5),
+                      Text(
+                        formattedTime,
+                        style: GoogleFonts.poppins(
+                          fontSize: 10,
+                          color: isMe ? Colors.white70 : Colors.grey[600],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );

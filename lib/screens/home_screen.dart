@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      return const Center(child: Text('No User Logged In'));
+      return const Center(child: Text('No User Logged In, Login First'));
     }
 
     return Scaffold(
@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           children: [
             CircleAvatar(
-              radius: 39,
+              radius: 42,
               backgroundImage: AssetImage(image),
             ),
             const SizedBox(width: 16),

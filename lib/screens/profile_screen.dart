@@ -27,7 +27,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _getUserInfo();
-    _loadProfileFromFirestore();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadProfileFromFirestore(); // Pindahkan ke PostFrameCallback
+    });
   }
 
   @override
@@ -57,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   /// Load profile data from Firestore
+  /// Load profile data from Firestore
   Future<void> _loadProfileFromFirestore() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -82,22 +85,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         } else {
           // Jika dokumen tidak ditemukan, tampilkan pesan
-          debugPrint('User document does not exist.');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('User profile not found.')),
-          );
+          Future.delayed(Duration.zero, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('User profile not found.')),
+            );
+          });
         }
       } else {
         debugPrint('No user is signed in.');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User is not signed in.')),
-        );
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('User is not signed in.')),
+          );
+        });
       }
     } catch (e) {
       debugPrint('Error loading profile: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load profile: $e')),
-      );
+      Future.delayed(Duration.zero, () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load profile: $e')),
+        );
+      });
     }
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/services.dart'; // Untuk FilteringTextInputFormatter
 import 'package:url_launcher/url_launcher.dart'; // Untuk panggilan telepon dan WhatsApp
 import '../models/contact.dart';
 import '../database/database_helper.dart'; // Import DatabaseHelper
@@ -144,7 +144,13 @@ class _ContactScreenState extends State<ContactScreen> {
                 ),
               ),
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
                 _deleteContact(contact.id!);
@@ -153,7 +159,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 "Yes",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
-                  color: Colors.red[400],
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -274,29 +280,23 @@ class _ContactScreenState extends State<ContactScreen> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.call,
-                                    color: Color(0xff5cc35f)),
-                                onPressed: () =>
-                                    _callContact(contact.phoneNumber),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.chat,
-                                    color: Color(0xff898de8)),
-                                onPressed: () =>
-                                    _chatWithContact(contact.phoneNumber),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete,
-                                    color: Color(0xfff4837b)),
-                                onPressed: () =>
-                                    _showDeleteConfirmationDialog(contact),
-                              ),
-                            ],
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete,
+                                color: Color(0xfff4837b)),
+                            onPressed: () =>
+                                _showDeleteConfirmationDialog(contact),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditContactScreen(
+                                  contact: contact,
+                                  onUpdate: _loadContacts,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
@@ -307,11 +307,81 @@ class _ContactScreenState extends State<ContactScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _isAddingContact = !_isAddingContact;
+            _isAddingContact = true;
           });
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) => Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                padding: const EdgeInsets.all(46),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        prefixIcon: const Icon(Icons.person),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      style: GoogleFonts.poppins(),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+                      ],
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        prefixIcon: const Icon(Icons.phone),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      style: GoogleFonts.poppins(),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _addContact,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff898de8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: Text(
+                        '  Add Contact  ',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         },
         backgroundColor: const Color(0xff898de8),
-        child: const Icon(Icons.person_add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

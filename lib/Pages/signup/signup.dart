@@ -81,18 +81,18 @@ class Signup extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 60),
-              Image.asset(
-                'assets/ImageLogin.png',
-                height: 150,
-              ),
+              const SizedBox(height: 20),
+              // Image.asset(
+              //   'assets/ImageLogin.png',
+              //   height: 150,
+              // ),
               const SizedBox(height: 25),
               RichText(
                 textAlign: TextAlign.center,
                 text: const TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Create your account',
+                      text: 'Lets get you started',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
