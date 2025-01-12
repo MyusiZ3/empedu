@@ -1,27 +1,29 @@
-import 'package:empedu/firebase_options.dart'; // Sesuaikan dengan nama package
-import 'package:empedu/pages/login/login.dart'; // Sesuaikan dengan nama package
+// Package
+import 'package:empedu/screens/splash_screen.dart'; // Splash Screen
+import 'package:empedu/pages/login/login.dart'; // Login
 import 'package:empedu/pages/dashboard/dashboard.dart'; // Dashboard
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-// Import screens kategori
+// Categories
 import 'package:empedu/pages/categories/math_screen.dart';
 import 'package:empedu/pages/categories/drawing_screen.dart';
 import 'package:empedu/pages/categories/reading_screen.dart';
 import 'package:empedu/pages/calculator/calculator.dart';
-import 'package:empedu/screens/splash_screen.dart'; // Splash Screen
-import 'package:cloud_firestore/cloud_firestore.dart'; // Untuk Firestore
 
-// Import Secure Storage
+// Firebase
+import 'package:cloud_firestore/cloud_firestore.dart'; // Untuk Firestore
+import 'package:empedu/firebase_options.dart'; // Firebase Options
+import 'package:firebase_core/firebase_core.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options:
-        DefaultFirebaseOptions.currentPlatform, // Pastikan file ini sudah ada
+    options: DefaultFirebaseOptions
+        .currentPlatform, // Inisialisasi Firebase dengan opsi default
   );
 
-  // Jalankan migrasi untuk memastikan semua dokumen users memiliki field uid
+  // Migrasi untuk memastikan field 'uid' di semua dokumen 'users'
   await migrateUsersUid();
 
   runApp(const MyApp());
