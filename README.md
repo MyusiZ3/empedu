@@ -1,4 +1,4 @@
-# Empedu Project (Empowering Education for Development and Understanding)
+# empEDU Project (Empowering Education for Development and Understanding)
 
 Empedu is a Flutter-based mobile application aimed at managing educational tasks efficiently. Below is the overview of the project's folder structure and its contents.
 
@@ -8,6 +8,8 @@ By :
 - Zahra Imani (7708223086)
 
 ## Project Structure
+
+-- Project Structure is unupdated. There may be changes
 
 empedu/
 ├── android/             # Android platform-specific code and configurations
@@ -34,7 +36,6 @@ empedu/
 ├── .gitignore           # Git ignore file to exclude unnecessary files from version control
 ├── pubspec.yaml         # Flutter package dependencies
 └── README.md            # Project documentation
-
 
 
 ### Folder Details
