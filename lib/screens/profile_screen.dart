@@ -178,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: 170,
+                  height: 160,
                   decoration: const BoxDecoration(
                     color: Color(0xff898de8),
                     borderRadius: BorderRadius.only(
@@ -199,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 120,
+                  top: 100,
                   left: MediaQuery.of(context).size.width / 2 - 65,
                   child: GestureDetector(
                     onTap: _pickProfileImage,
@@ -222,11 +222,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Positioned(
-                          bottom: 0,
-                          right: 0,
+                          top: 2,
+                          right: 2,
                           child: CircleAvatar(
-                            radius: 19,
-                            backgroundColor: Colors.blueAccent,
+                            radius: 18,
+                            backgroundColor:
+                                const Color.fromARGB(255, 153, 158, 224),
                             child: const Icon(
                               Icons.camera_alt,
                               size: 18,
@@ -240,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 90),
             const Center(
               child: Text(
                 'Personal Information',

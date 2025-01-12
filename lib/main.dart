@@ -10,6 +10,7 @@ import 'package:empedu/pages/categories/drawing_screen.dart';
 import 'package:empedu/pages/categories/reading_screen.dart';
 import 'package:empedu/pages/calculator/calculator.dart';
 import 'package:empedu/screens/splash_screen.dart'; // Splash Screen
+import 'package:cloud_firestore/cloud_firestore.dart'; // Untuk Firestore
 
 // Import Secure Storage
 Future<void> main() async {
@@ -20,9 +21,35 @@ Future<void> main() async {
         DefaultFirebaseOptions.currentPlatform, // Pastikan file ini sudah ada
   );
 
+  // Jalankan migrasi untuk memastikan semua dokumen users memiliki field uid
+  await migrateUsersUid();
+
   runApp(const MyApp());
 }
 
+// ---------------------------------------------------
+// FUNGSI MIGRASI UNTUK MEMASTIKAN FIELD 'UID' DI USERS
+// ---------------------------------------------------
+Future<void> migrateUsersUid() async {
+  try {
+    final usersCollection = FirebaseFirestore.instance.collection('users');
+    final snapshot = await usersCollection.get();
+
+    for (var doc in snapshot.docs) {
+      if (!doc.data().containsKey('uid')) {
+        // Jika tidak ada field 'uid', tambahkan dengan nilai documentId
+        await usersCollection.doc(doc.id).update({'uid': doc.id});
+      }
+    }
+    debugPrint("Migration completed: All users now have a 'uid' field.");
+  } catch (e) {
+    debugPrint("Error during migration: $e");
+  }
+}
+
+// ---------------------------------------------------
+// APLIKASI UTAMA
+// ---------------------------------------------------
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

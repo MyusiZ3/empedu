@@ -49,6 +49,7 @@ class AuthService {
 
       // Add user data to Firestore
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
+        'uid': userCredential.user!.uid, // UID field
         'email': email,
         'name': name,
         'profileimage': profileImageUrl,
@@ -150,34 +151,6 @@ class AuthService {
     }
   }
 
-  // Function to show logout confirmation dialog
-  Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
-    return await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Confirm Logout'),
-              content: const Text('Are you sure you want to log out?'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.of(context).pop(false); // Don't log out
-                  },
-                ),
-                TextButton(
-                  child: const Text('Yes'),
-                  onPressed: () {
-                    Navigator.of(context).pop(true); // Proceed with logout
-                  },
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
-  }
-
   // Function to pick image for profile
   Future<String?> pickImage({required BuildContext context}) async {
     final ImagePicker _picker = ImagePicker();
@@ -210,7 +183,7 @@ class AuthService {
     return imageUrl;
   }
 
-  // Function to handle errors
+  // Function to show error dialog
   void _showErrorDialog(BuildContext context, String errorMessage) {
     if (context.mounted) {
       showDialog(
@@ -231,5 +204,33 @@ class AuthService {
         },
       );
     }
+  }
+
+  // Function to show logout confirmation dialog
+  Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirm Logout'),
+              content: const Text('Are you sure you want to log out?'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Don't log out
+                  },
+                ),
+                TextButton(
+                  child: const Text('Yes'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // Proceed with logout
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 }

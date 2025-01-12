@@ -76,6 +76,10 @@ flutter:
     - assets/menggambar.png
     - assets/Menghitung.png
     - assets/Mewarnai.png
+    - assets/reading.png
+    - assets/math.png
+    - assets/drawing.png
+    - assets/calculator.png
 
   fonts:
     - family: Poppins
