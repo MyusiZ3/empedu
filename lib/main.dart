@@ -12,8 +12,6 @@ import 'package:empedu/pages/calculator/calculator.dart';
 import 'package:empedu/screens/splash_screen.dart'; // Splash Screen
 
 // Import Secure Storage
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

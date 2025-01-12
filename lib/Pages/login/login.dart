@@ -25,10 +25,8 @@ class Login extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 1),
           child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Center column vertically
-            crossAxisAlignment:
-                CrossAxisAlignment.center, // Center column horizontally
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               RichText(
                 text: const TextSpan(
@@ -39,7 +37,7 @@ class Login extends StatelessWidget {
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins-SemiBold',
-                        color: Color(0xFFF691FF), // "emp" color
+                        color: Color(0xFFF691FF),
                       ),
                     ),
                     TextSpan(
@@ -48,7 +46,7 @@ class Login extends StatelessWidget {
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins-SemiBold',
-                        color: Color(0xFF7B88FF), // "EDU" color
+                        color: Color(0xFF7B88FF),
                       ),
                     ),
                   ],
@@ -83,12 +81,11 @@ class Login extends StatelessWidget {
                 'assets/ImageLogin.png',
                 height: 150,
               ),
-              const SizedBox(
-                  height: 40), // Adjusted to reduce excessive spacing
+              const SizedBox(height: 40),
               _emailAddress(),
               const SizedBox(height: 16),
               _password(),
-              const SizedBox(height: 40), // Adjusted spacing to fit better
+              const SizedBox(height: 40),
               _signin(context),
             ],
           ),
@@ -97,6 +94,7 @@ class Login extends StatelessWidget {
     );
   }
 
+  // Widget untuk input email
   Widget _emailAddress() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -107,9 +105,10 @@ class Login extends StatelessWidget {
           width: 320,
           child: TextField(
             controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: 'Email',
-              prefixIcon: const Icon(Icons.person),
+              prefixIcon: const Icon(Icons.email),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -122,21 +121,12 @@ class Login extends StatelessWidget {
     );
   }
 
+  // Widget untuk input password
   Widget _password() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   'Password',
-        //   style: GoogleFonts.raleway(
-        //     textStyle: const TextStyle(
-        //       color: Colors.black,
-        //       fontWeight: FontWeight.normal,
-        //       fontSize: 16,
-        //     ),
-        //   ),
-        // ),
         const SizedBox(height: 6),
         SizedBox(
           width: 320,
@@ -158,14 +148,24 @@ class Login extends StatelessWidget {
     );
   }
 
+  // Tombol untuk login
   Widget _signin(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        await AuthService().signin(
-          email: _emailController.text,
-          password: _passwordController.text,
-          context: context,
-        );
+        if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+          _showErrorDialog(context, "Please enter both email and password.");
+          return;
+        }
+
+        try {
+          await AuthService().signin(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+            context: context,
+          );
+        } catch (e) {
+          _showErrorDialog(context, e.toString());
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xff898de8),
@@ -185,6 +185,7 @@ class Login extends StatelessWidget {
     );
   }
 
+  // Widget untuk navigasi ke halaman signup
   Widget _signup(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 36),
@@ -216,6 +217,27 @@ class Login extends StatelessWidget {
           ),
         ]),
       ),
+    );
+  }
+
+  // Dialog untuk menampilkan pesan kesalahan
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

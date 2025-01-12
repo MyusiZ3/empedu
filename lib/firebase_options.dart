@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '145908719158',
     projectId: 'empedu-a57c3',
     storageBucket: 'empedu-a57c3.firebasestorage.app',
-    iosBundleId: 'com.example.empedu',
+    iosBundleId: 'com.imyusi.empedu',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '145908719158',
     projectId: 'empedu-a57c3',
     storageBucket: 'empedu-a57c3.firebasestorage.app',
-    iosBundleId: 'com.example.empedu',
+    iosBundleId: 'com.imyusi.empedu',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

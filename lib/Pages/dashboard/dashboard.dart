@@ -1,7 +1,7 @@
+import 'package:empedu/pages/chat/chat_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:empedu/screens/profile_screen.dart'; // Import ProfileScreen
 import 'package:empedu/screens/contact_screen.dart'; // Import ContactScreen
-import 'package:empedu/pages/chat/chat_dashboard.dart'; // Import ChatDashboardScreen
 import 'package:empedu/screens/home_screen.dart'; // Import HomeScreen
 
 class DashboardPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _DashboardPageState extends State<DashboardPage> {
     HomeScreen(), // Halaman HomeScreen
     ProfileScreen(), // Halaman ProfileScreen
     ContactScreen(), // Halaman ContactScreen
-    ChatDashboard(), // Halaman ChatDashboardScreen
+    ChatDashboard() // halaman ChatDashboard
   ];
 
   /// Fungsi untuk menangani tap pada bottom navigation bar

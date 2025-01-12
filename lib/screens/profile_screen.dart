@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart'; // For image picking
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 
@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _getUserInfo();
-    _loadProfileFromFirestore(); // Load profile from Firestore
+    _loadProfileFromFirestore();
   }
 
   @override
@@ -37,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
-  /// Get user information from Firebase Authentication
   void _getUserInfo() {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -51,7 +50,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  /// Extract username from email
   String _getUserNameFromEmail(String? email) {
     if (email == null) return '';
     String userName = email.split('@')[0];
@@ -62,14 +60,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _loadProfileFromFirestore() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
+
       if (user != null) {
+        // Coba mengambil dokumen pengguna
         DocumentSnapshot<Map<String, dynamic>> snapshot =
             await FirebaseFirestore.instance
                 .collection('users')
                 .doc(user.uid)
                 .get();
 
-        if (snapshot.exists) {
+        if (snapshot.exists && snapshot.data() != null) {
           Map<String, dynamic> data = snapshot.data()!;
           setState(() {
             _userNameController.text = data['name'] ?? '';
@@ -77,116 +77,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _profileImage = data['profileimage'] ?? 'assets/default_avatar.png';
             _birthDate = data['birthdate'] != null
                 ? (data['birthdate'] as Timestamp).toDate()
-                : null; // Convert Firestore Timestamp to DateTime
+                : null;
             selectedGender = data['gender'];
           });
+        } else {
+          // Jika dokumen tidak ditemukan, tampilkan pesan
+          debugPrint('User document does not exist.');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('User profile not found.')),
+          );
         }
+      } else {
+        debugPrint('No user is signed in.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User is not signed in.')),
+        );
       }
     } catch (e) {
+      debugPrint('Error loading profile: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load profile: $e')),
       );
     }
   }
 
-  // Konfirmasi sebelum ganti email
-  Future<String?> _getPasswordFromUser() async {
-    String? password;
-    await showDialog(
-      context: context,
-      builder: (context) {
-        TextEditingController passwordController = TextEditingController();
-        return AlertDialog(
-          title: Text('Reauthenticate'),
-          content: TextField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: InputDecoration(labelText: 'Enter your password'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                password = passwordController.text.trim();
-                Navigator.of(context).pop();
-              },
-              child: Text('Confirm'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pop(); // Close dialog without setting password
-              },
-              child: Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-    return password;
-  }
-
-// Save profile data to Firestore
   Future<void> _saveProfileToFirestore() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        String newEmail = _emailController.text.trim();
-        String currentEmail = user.email ?? '';
-
-        // Check if the email has changed
-        if (newEmail != currentEmail) {
-          // Request password from user
-          String? password = await _getPasswordFromUser();
-          if (password == null || password.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text('Password is required for reauthentication.')),
-            );
-            return;
-          }
-
-          // Reauthenticate the user
-          AuthCredential credential = EmailAuthProvider.credential(
-            email: currentEmail,
-            password: password,
-          );
-          await user.reauthenticateWithCredential(credential);
-
-          // Send verification email for new email
-          await user.sendEmailVerification();
-
-          // Inform user to verify email
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Please verify your new email before updating.')),
-          );
-
-          // You could also wait for the user to verify the email before proceeding
-          // Here you might want to add a delay or a mechanism to check if the email is verified.
-          // For example, checking user.reload() to get updated user info.
-
-          return; // Do not proceed further until email is verified
-
-          // Update email in Firebase Auth after verification
-        }
-
-        // Save profile data to Firestore
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
           {
             'name': _userNameController.text.trim(),
-            'email': newEmail,
+            'email': _emailController.text.trim(),
             'profileimage': _profileImage,
-            'birthdate':
-                _birthDate, // DateTime will be converted to Firestore Timestamp
+            'birthdate': _birthDate,
             'gender': selectedGender,
           },
-          SetOptions(
-              merge:
-                  true), // Merge: update existing fields without overwriting others
+          SetOptions(merge: true),
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Profile saved successfully!')),
+          const SnackBar(content: Text('Profile saved successfully!')),
         );
       }
     } catch (e) {
@@ -196,7 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  /// Pick profile image from gallery
   Future<void> _pickProfileImage() async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
@@ -207,30 +137,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  /// Show logout confirmation dialog
   void _showLogoutDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure?'),
+          title: const Text('Logout'),
+          content: const Text('Are you sure?'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop();
               },
-              child: Text('No'),
+              child: const Text('No'),
             ),
             TextButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
                 if (mounted) {
-                  Navigator.of(context).pop(); // Close dialog
+                  Navigator.of(context).pop();
                   Navigator.of(context).pushReplacementNamed('/login');
                 }
               },
-              child: Text('Yes'),
+              child: const Text('Yes'),
             ),
           ],
         );
@@ -245,20 +174,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            /// Header with profile image
             Stack(
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: 180,
-                  decoration: BoxDecoration(
+                  height: 170,
+                  decoration: const BoxDecoration(
                     color: Color(0xff898de8),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(40),
                       bottomRight: Radius.circular(40),
                     ),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'PROFILE',
                       style: TextStyle(
@@ -270,25 +198,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                // Gambar Profil dan Ikon Kamera
                 Positioned(
-                  top: 120, // Atur jarak dari atas
-                  left: MediaQuery.of(context).size.width / 2 -
-                      65, // Atur posisi tengah
+                  top: 120,
+                  left: MediaQuery.of(context).size.width / 2 - 65,
                   child: GestureDetector(
-                    onTap: _pickProfileImage, // Fungsi untuk memilih gambar
+                    onTap: _pickProfileImage,
                     child: Stack(
-                      clipBehavior: Clip.none,
                       children: [
                         Container(
                           width: 130,
                           height: 130,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 4,
-                            ),
+                            border: Border.all(color: Colors.white, width: 4),
                           ),
                           child: CircleAvatar(
                             radius: 70,
@@ -299,17 +221,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundColor: Colors.grey[300],
                           ),
                         ),
-                        // Ikon Kamera
                         Positioned(
-                          top: 0, // Ikon berada di bawah gambar
-                          right: 0, // Ikon berada di kanan bawah
+                          bottom: 0,
+                          right: 0,
                           child: CircleAvatar(
-                            radius: 19, // Ukuran lingkaran ikon kamera
-                            backgroundColor:
-                                const Color.fromARGB(255, 150, 186, 247),
-                            child: Icon(
+                            radius: 19,
+                            backgroundColor: Colors.blueAccent,
+                            child: const Icon(
                               Icons.camera_alt,
-                              size: 18, // Ukuran ikon kamera
+                              size: 18,
                               color: Colors.white,
                             ),
                           ),
@@ -320,9 +240,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-
-            SizedBox(height: 100),
-            Center(
+            const SizedBox(height: 100),
+            const Center(
               child: Text(
                 'Personal Information',
                 style: TextStyle(
@@ -333,21 +252,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
-
-            /// Editable fields
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 children: [
                   _buildEditableField('Name', _userNameController),
-                  SizedBox(height: 12),
-                  _buildEmailField(),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
+                  _buildEditableField('Email', _emailController),
+                  const SizedBox(height: 12),
                   _buildDatePickerField(context),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   _buildGenderDropdown(),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: _saveProfileToFirestore,
                     style: ElevatedButton.styleFrom(
@@ -366,26 +283,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   TextButton(
                     onPressed: _showLogoutDialog,
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xFFFFFFFF), // Warna latar belakang
-                      minimumSize: const Size(147, 48), // Ukuran minimum button
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
                     child: const Text(
                       'Logout',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Color.fromARGB(255, 193, 193, 193), // Warna teks
+                        color: Colors.grey,
                         fontFamily: 'Poppins-Bold',
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -397,14 +306,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildEditableField(String label, TextEditingController controller) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 6,
           ),
         ],
@@ -414,30 +323,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         readOnly: !isEditing,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(
-            fontFamily: 'Poppins-Medium',
-            fontSize: 14,
-          ),
           border: InputBorder.none,
         ),
       ),
     );
   }
 
-  Widget _buildEmailField() {
-    return _buildEditableField('Email', _emailController);
-  }
-
   Widget _buildDatePickerField(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 6,
           ),
         ],
@@ -449,16 +350,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _birthDate != null
                   ? DateFormat('dd/MM/yyyy').format(_birthDate!)
                   : 'Date of Birth',
-              style: TextStyle(
-                fontFamily: 'Poppins-Bold',
-                fontSize: 14,
-                color: Color(0xff677294),
-              ),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.calendar_today,
-                color: const Color.fromARGB(255, 149, 149, 149)),
+            icon: const Icon(Icons.calendar_today),
             onPressed: () async {
               DateTime? pickedDate = await showDatePicker(
                 context: context,
@@ -480,14 +375,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildGenderDropdown() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 6,
           ),
         ],
@@ -495,7 +390,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: selectedGender,
-          hint: Text('Select Gender'),
+          hint: const Text('Select Gender'),
           isExpanded: true,
           items: genderOptions.map((gender) {
             return DropdownMenuItem(
@@ -503,13 +398,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text(gender),
             );
           }).toList(),
-          onChanged: isEditing
-              ? (value) {
-                  setState(() {
-                    selectedGender = value;
-                  });
-                }
-              : null,
+          onChanged: (value) {
+            setState(() {
+              selectedGender = value;
+            });
+          },
         ),
       ),
     );

@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = ''; // Menyimpan query pencarian
-  List<Map<String, dynamic>> _categories = []; // Kategori dari Firestore
+  List<Map<String, dynamic>> _categories = []; // Data kategori dari Firestore
   final FocusNode _searchFocusNode = FocusNode(); // Fokus untuk search bar
 
   @override
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return {
             "id": doc.id,
             "title": doc["title"],
-            "lessons": doc["lessons"].toString(), // Pastikan diubah ke string
+            "lessons": doc["lessons"].toString(), // Konversi ke string
             "color": parseColor(doc["color"]), // Konversi warna dari string
             "image": doc["image"],
             "targetScreen": doc["targetScreen"],
@@ -178,12 +178,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   focusNode: _searchFocusNode,
                   onChanged: _updateSearchQuery,
                   style: const TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255)), // Abu-abu
+                      color: Color.fromARGB(255, 255, 255, 255)),
                   decoration: const InputDecoration(
                     hintText: 'Search Lessons...',
                     hintStyle: TextStyle(
-                      color: Color.fromARGB(
-                          255, 255, 255, 255), // Abu-abu untuk hint
+                      color: Color.fromARGB(255, 255, 255, 255),
                       fontSize: 13,
                     ),
                     prefixIcon: Icon(Icons.search, color: Colors.white),
@@ -226,10 +225,10 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList();
 
     if (filteredCategories.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           'Category Not Found',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             color: Colors.grey,
           ),

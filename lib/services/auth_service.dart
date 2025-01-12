@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:empedu/pages/dashboard/dashboard.dart';
-import 'package:empedu/pages/login/login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class AuthService {
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Function to save user login status
   Future<void> _saveUserLogin() async {
@@ -25,12 +26,14 @@ class AuthService {
   Future<void> signup({
     required String email,
     required String password,
+    required String name,
+    required String profileImageUrl,
     required BuildContext context,
   }) async {
     try {
-      if (email.isEmpty || password.isEmpty) {
+      if (email.isEmpty || password.isEmpty || name.isEmpty) {
         Fluttertoast.showToast(
-          msg: "Email and password cannot be empty.",
+          msg: "All fields are required.",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.SNACKBAR,
           backgroundColor: Colors.black54,
@@ -40,16 +43,29 @@ class AuthService {
         return;
       }
 
-      await FirebaseAuth.instance
+      // Create user with Firebase Auth
+      UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      await Future.delayed(const Duration(seconds: 1));
+      // Add user data to Firestore
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+        'email': email,
+        'name': name,
+        'profileimage': profileImageUrl,
+        'contacts': [], // Initialize contacts as empty array
+      });
+
+      Fluttertoast.showToast(
+        msg: "Signup successful! Please login.",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
 
       if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => Login()),
-        );
+        Navigator.pushReplacementNamed(context, '/login');
       }
     } on FirebaseAuthException catch (e) {
       String message = '';
@@ -91,19 +107,14 @@ class AuthService {
         return;
       }
 
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       await _saveUserLogin(); // Save login status
 
       await Future.delayed(const Duration(seconds: 1));
 
       if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const DashboardPage()),
-        );
+        Navigator.pushReplacementNamed(context, '/dashboard');
       }
     } on FirebaseAuthException catch (e) {
       String message = '';
@@ -130,16 +141,11 @@ class AuthService {
   Future<void> signout({required BuildContext context}) async {
     bool shouldLogout = await _showLogoutConfirmationDialog(context);
     if (shouldLogout) {
-      await FirebaseAuth.instance.signOut();
+      await _auth.signOut();
       await _secureStorage.delete(key: 'isLoggedIn'); // Clear login status
 
-      await Future.delayed(const Duration(seconds: 1));
-
       if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => Login()),
-        );
+        Navigator.pushReplacementNamed(context, '/login');
       }
     }
   }
@@ -173,14 +179,16 @@ class AuthService {
   }
 
   // Function to pick image for profile
-  Future<void> pickImage({required BuildContext context}) async {
+  Future<String?> pickImage({required BuildContext context}) async {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       File image = File(pickedFile.path);
-      _uploadProfileImage(image, context);
+      // Handle the upload of profile image to cloud storage (Firebase Storage)
+      String imageUrl = await _uploadProfileImage(image);
+      return imageUrl;
     } else {
       Fluttertoast.showToast(
         msg: "No image selected.",
@@ -190,33 +198,19 @@ class AuthService {
         textColor: Colors.white,
         fontSize: 14.0,
       );
+      return null;
     }
   }
 
   // Function to upload profile image
-  Future<void> _uploadProfileImage(File image, BuildContext context) async {
-    try {
-      Fluttertoast.showToast(
-        msg: "Profile picture updated successfully.",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Failed to upload image.",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
-    }
+  Future<String> _uploadProfileImage(File image) async {
+    // Simulasi proses upload ke Firebase Storage
+    String imageUrl =
+        "https://example.com/profile-image.jpg"; // URL hasil upload
+    return imageUrl;
   }
 
-  // Existing error dialog function
+  // Function to handle errors
   void _showErrorDialog(BuildContext context, String errorMessage) {
     if (context.mounted) {
       showDialog(

@@ -1,246 +1,258 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:empedu/Pages/chat/chat_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'chat_screen.dart';
 
 class ChatDashboard extends StatefulWidget {
+  const ChatDashboard({Key? key}) : super(key: key);
+
   @override
-  _ChatDashboardState createState() => _ChatDashboardState();
+  State<ChatDashboard> createState() => _ChatDashboardState();
 }
 
 class _ChatDashboardState extends State<ChatDashboard> {
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _searchController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<Map<String, dynamic>> _contacts = [];
-  String _currentUserId = '';
-  bool _isLoading = false;
+  List<dynamic> _contacts = [];
+  String _searchQuery = '';
+  bool _showAddContactField = false;
 
   @override
   void initState() {
     super.initState();
-    _getCurrentUser();
+    _checkUser();
     _loadContacts();
   }
 
-  Future<void> _getCurrentUser() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      setState(() {
-        _currentUserId = user.uid;
-      });
-    }
-  }
-
-  Future<void> _loadContacts() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final userDoc =
-        await _firestore.collection('users').doc(_currentUserId).get();
-
-    if (userDoc.exists) {
-      if (!userDoc.data()!.containsKey('contacts')) {
-        // Jika field 'contacts' tidak ada, tambahkan secara otomatis
-        await _firestore.collection('users').doc(_currentUserId).set({
-          'contacts': [],
-        }, SetOptions(merge: true)); // Merge agar tidak menimpa data lain
-      }
-
-      final contactEmails = List<String>.from(userDoc['contacts'] ?? []);
-      if (contactEmails.isNotEmpty) {
-        final contactDocs = await _firestore
-            .collection('users')
-            .where('email', whereIn: contactEmails)
-            .get();
-
-        setState(() {
-          _contacts = contactDocs.docs
-              .map((doc) => {'id': doc.id, ...doc.data()!})
-              .toList();
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _contacts = [];
-          _isLoading = false;
-        });
+  void _checkUser() {
+    if (_currentUser == null) {
+      debugPrint('User not logged in');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please log in to continue')),
+        );
+        Navigator.pushReplacementNamed(context, '/login');
       }
     } else {
-      setState(() {
-        _contacts = [];
-        _isLoading = false;
-      });
+      debugPrint('User is logged in with UID: ${_currentUser!.uid}');
     }
   }
 
+  /// Load contacts from Firestore
+  Future<void> _loadContacts() async {
+    try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUser!.uid)
+          .get();
+
+      if (userDoc.exists) {
+        final data = userDoc.data();
+        setState(() {
+          _contacts = data != null && data.containsKey('contacts')
+              ? List<String>.from(data['contacts'])
+              : [];
+        });
+      } else {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_currentUser!.uid)
+            .set({'contacts': []});
+        setState(() {
+          _contacts = [];
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading contacts: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load contacts: $e')),
+        );
+      }
+    }
+  }
+
+  /// Add contact
   Future<void> _addContact(String email) async {
-    final contactDoc = await _firestore
-        .collection('users')
-        .where('email', isEqualTo: email)
-        .get();
+    try {
+      final usersCollection = FirebaseFirestore.instance.collection('users');
+      final querySnapshot =
+          await usersCollection.where('email', isEqualTo: email).get();
 
-    if (contactDoc.docs.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User not found')),
-      );
-      return;
-    }
+      if (querySnapshot.docs.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('User not found')),
+          );
+        }
+        return;
+      }
 
-    final contactId = contactDoc.docs.first.id;
+      final contactEmail = querySnapshot.docs.first['email'];
 
-    final userDoc =
-        await _firestore.collection('users').doc(_currentUserId).get();
-
-    List<String> contacts =
-        userDoc.exists && userDoc.data()!.containsKey('contacts')
-            ? List<String>.from(userDoc['contacts'])
-            : [];
-
-    if (contacts.contains(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Contact already exists')),
-      );
-      return;
-    }
-
-    contacts.add(email);
-
-    await _firestore.collection('users').doc(_currentUserId).set({
-      'contacts': contacts,
-    }, SetOptions(merge: true)); // Merge agar tidak menimpa data lain
-
-    _loadContacts();
-  }
-
-  Future<void> _deleteContact(String email) async {
-    final userDoc =
-        await _firestore.collection('users').doc(_currentUserId).get();
-
-    if (userDoc.exists && userDoc['contacts'] != null) {
-      List<String> contacts = List<String>.from(userDoc['contacts']);
-      contacts.remove(email);
-
-      await _firestore.collection('users').doc(_currentUserId).update({
-        'contacts': contacts,
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUser!.uid)
+          .update({
+        'contacts': FieldValue.arrayUnion([contactEmail]),
       });
 
       _loadContacts();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Contact added')),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error adding contact: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add contact: $e')),
+        );
+      }
     }
+  }
+
+  /// Delete contact
+  Future<void> _deleteContact(String email) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUser!.uid)
+          .update({
+        'contacts': FieldValue.arrayRemove([email]),
+      });
+
+      _loadContacts();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Contact removed')),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error deleting contact: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to remove contact: $e')),
+        );
+      }
+    }
+  }
+
+  /// Filter contacts based on search query
+  List<dynamic> _filterContacts() {
+    if (_searchQuery.isEmpty) {
+      return _contacts;
+    }
+    return _contacts
+        .where((contact) => contact
+            .toString()
+            .toLowerCase()
+            .contains(_searchQuery.toLowerCase()))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    final filteredContacts = _filterContacts();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat Dashboard'),
+        title: const Text('Chat Dashboard'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text('Add Contact'),
-                    content: TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(hintText: 'Enter email'),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _addContact(_emailController.text.trim());
-                          _emailController.clear();
-                        },
-                        child: Text('Add'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              backgroundColor: _currentUser != null ? Colors.green : Colors.red,
+              radius: 10,
+            ),
           ),
         ],
       ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
+              controller: TextEditingController(text: _searchQuery),
+              onChanged: (value) => setState(() => _searchQuery = value),
+              decoration: const InputDecoration(
+                labelText: 'Search Contacts',
                 prefixIcon: Icon(Icons.search),
-                hintText: 'Search contacts...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                border: OutlineInputBorder(),
               ),
-              onChanged: (value) {
-                setState(() {});
-              },
             ),
           ),
-          _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: _contacts.length,
+          Expanded(
+            child: _contacts.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No contacts found. Add a contact to start chatting.',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: filteredContacts.length,
                     itemBuilder: (context, index) {
-                      final contact = _contacts[index];
-                      final searchQuery = _searchController.text.toLowerCase();
-                      if (searchQuery.isNotEmpty &&
-                          !contact['name']
-                              .toLowerCase()
-                              .contains(searchQuery) &&
-                          !contact['email']
-                              .toLowerCase()
-                              .contains(searchQuery)) {
-                        return Container();
-                      }
+                      final contactEmail = filteredContacts[index];
 
                       return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: contact['profileimage'] != null &&
-                                  contact['profileimage'].isNotEmpty
-                              ? NetworkImage(contact['profileimage'])
-                              : AssetImage('assets/default_avatar.png')
-                                  as ImageProvider,
+                        leading: const CircleAvatar(
+                          backgroundImage:
+                              AssetImage('assets/default_avatar.png'),
                         ),
-                        title: Text(contact['name']),
-                        subtitle: Text(contact['email']),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            _deleteContact(contact['email']);
-                          },
-                        ),
+                        title: Text(contactEmail.split('@')[0]), // Display name
+                        subtitle: Text(contactEmail), // Display email
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => ChatPage(
-                                contactId: contact['id'],
-                                contactName: contact['name'],
-                                contactEmail: contact['email'],
-                                contactImage: contact['profileimage'] ?? '',
+                              builder: (context) => ChatScreen(
+                                receiverEmail: contactEmail,
+                                receiverName: contactEmail.split('@')[0],
                               ),
                             ),
                           );
                         },
+                        onLongPress: () => _deleteContact(contactEmail),
                       );
                     },
                   ),
-                ),
+          ),
+          if (_showAddContactField)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Enter email to add',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      final email = _emailController.text.trim();
+                      if (email.isNotEmpty) {
+                        _addContact(email);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _showAddContactField = !_showAddContactField;
+              });
+            },
+            child: Text(_showAddContactField ? 'Cancel' : 'Add Contact'),
+          ),
         ],
       ),
     );
