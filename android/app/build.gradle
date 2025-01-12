@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example.empedu"
+    namespace = "com.imyusi.empedu"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     defaultConfig {
-        applicationId "com.example.empedu" // Sesuaikan dengan Application ID di Firebase Console
+        applicationId "com.imyusi.empedu" // Sesuaikan dengan Application ID di Firebase Console
         minSdkVersion 23 // Minimal SDK yang kompatibel dengan Firebase
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutter.versionCode
